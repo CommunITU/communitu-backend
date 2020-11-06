@@ -11,7 +11,7 @@ from app.exceptions.database_exceptions import DatabaseConnectionError
 
 def require_sql_connection(func):
     """
-    Decorator for the functions which requires the database connection.
+    Decorator for the functions which require the database connection.
     Creates the database connection and passes it as an argument to given function .
 
     :param func: The function to be executed.
