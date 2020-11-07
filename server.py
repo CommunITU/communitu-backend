@@ -1,21 +1,19 @@
 from flask import Flask
-
-from app.models.event_model import EventModel
 from app.repository.event_repository import EventRepository
+from app.repository.user_repository import UserRepository
 
 
-def create_app():
-    app = Flask(__name__)
-    return app
+def init_app():
+    UserRepository().initialize_table()  # init user table
+    EventRepository().initialize_table()  # init event table
+    return Flask(__name__)
 
 
-app = create_app()
+app = init_app()
 
 
 @app.route("/")
 def home_page():
-    event = EventModel("Forencics Training", "Event description", "6 ekim", "11 ekim", 21)
-    EventRepository().initialize_table()
     return "Hello, world!"
 
 
