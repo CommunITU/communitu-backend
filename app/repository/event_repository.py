@@ -4,6 +4,10 @@ from app.constants.database_constants import EVENTS_DB_TABLE_NAME
 
 
 class EventRepository(BaseRepository):
+    """ Repository class for the event objects.
+        Performs all database operations related to event objects.
+    """
+
     def __init__(self):
         super().__init__(table=EVENT_DB_TABLE_NAME)
 
