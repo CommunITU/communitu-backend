@@ -5,7 +5,7 @@ from app.constants.database_constants import EVENTS_DB_TABLE_NAME
 
 class EventRepository(BaseRepository):
     def __init__(self):
-        super().__init__(table=EVENTS_DB_TABLE_NAME)
+        super().__init__(table=EVENT_DB_TABLE_NAME)
 
     def initialize_table(self):
-        super().initialize_table(initialization_statement=EVENTS_DB_TABLE_INIT_STAT)
+        super().initialize_table(initialization_statement=EVENT_DB_TABLE_INIT_STAT)
