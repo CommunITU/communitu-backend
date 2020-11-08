@@ -13,3 +13,10 @@ class EventRepository(BaseRepository):
 
     def initialize_table(self):
         super().initialize_table(initialization_statement=EVENT_DB_TABLE_INIT_STAT)
+
+    def create_event(self, event_data):
+        """
+        Create new event on database.
+        :param event_data.
+        """
+        print(event_data)
