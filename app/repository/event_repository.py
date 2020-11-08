@@ -1,6 +1,6 @@
 from app.repository.base_repository import BaseRepository
-from app.constants.database_constants import EVENTS_DB_TABLE_INIT_STAT
-from app.constants.database_constants import EVENTS_DB_TABLE_NAME
+from app.constants.database_constants import EVENT_DB_TABLE_INIT_STAT
+from app.constants.database_constants import EVENT_DB_TABLE_NAME
 
 
 class EventRepository(BaseRepository):
