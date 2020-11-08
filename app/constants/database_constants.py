@@ -5,6 +5,8 @@ DB_CONNECTION_URL = "postgres://postgres:postgres@localhost:5432/communitu-db"
 """ Table names """
 EVENT_DB_TABLE_NAME = "event"
 USER_DB_TABLE_NAME = "_user"
+COMMENT_DB_TABLE_NAME = "comment"
+REPLYTO_DB_TABLE_NAME = "replyto"
 
 """ Initial statements  """
 EVENT_DB_TABLE_INIT_STAT = """CREATE TABLE IF NOT EXISTS EVENT (
