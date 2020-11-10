@@ -19,4 +19,4 @@ class EventRepository(BaseRepository):
         Create new event on database.
         :param event_data.
         """
-        print(event_data)
+        super().create(event_data)
