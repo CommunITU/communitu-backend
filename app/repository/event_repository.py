@@ -20,3 +20,9 @@ class EventRepository(BaseRepository):
         :param event_data.
         """
         super().create(event_data)
+
+    def get_all_events(self):
+        """
+        :return:  All events ordered by created date.
+        """
+        return super().select(order_by={"created_at": "DESC"})

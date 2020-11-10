@@ -9,14 +9,68 @@ class BaseRepository:
 
     @require_sql_connection
     def initialize_table(self, connection, initialization_statement):
+        """
+
+        :param connection:          Provided by @require_sql_decorator. Do not specify in function calls explicitly.
+        :param initialization_statement:    Init. statement of the table.
+        """
         with connection.cursor() as cursor:
             cursor.execute(initialization_statement)
 
     @require_sql_connection
     def create(self, data, connection=None):
+        """
+        Creates new record on database based on passed data.
+
+        :param data:        The dictionary that contains the data of the record will be created.
+        :param connection:  Provided by @require_sql_decorator. Do not specify in function calls explicitly.
+        """
         with connection.cursor() as cursor:
             create_statement = """INSERT INTO {}({}) VALUES({})
                                 """.format(self.table, str.join(", ", data.keys()),
                                            str.join(", ", ["'{}'".format(str(val)) for val in data.values()]))
             cursor.execute(create_statement)
-            print("[OK] Created new event: {} ".format(data["title"]))
+
+    @require_sql_connection
+    def select(self, connection=None, return_columns=[], from_tables=[],
+               where={}, limit=None, order_by={}):
+        """
+        Query the database based on specified conditions.
+
+        :param connection:          Provided by @require_sql_decorator. Do not specify in function calls explicitly.
+        :param return_columns:      The list of wanted column names.
+        :param from_tables:         The list of table names that columns are to be selected from. Multiple tables names
+                                    are usually required in 'JOIN' queries. So, not necessary to pass that argument if
+                                    only one table (self.table) will be queried.
+        :param where:               The dictionary of where conditions. The column names should be specified as key and
+                                    conditions as value.
+        :param limit:               The number of records that will be returned.
+        :param order_by:            The dictionary of order by conditions. The keys of dictionary should be the
+                                    column names, values should be 'ASC' or 'DESC'.
+
+        :return: Query result
+        """
+        with connection.cursor() as cursor:
+
+            # Add 'select' clause
+            select_statement = " SELECT {}".format(str.join(", ", return_columns) if return_columns else "* ")
+
+            # Add 'from' clause
+            select_statement += " FROM {}".format((str.join(", ", from_tables)) if return_columns else self.table)
+
+            # Add 'where' clause
+            if where:
+                select_statement += " WHERE " + str.join(" AND ", ["{}='{}'".format(w, where[w]) for w in where.keys()])
+
+            # Add 'limit' clause
+            if limit:
+                select_statement += " LIMIT " + str(limit)
+
+            # Add 'order_by' clause
+            if order_by:
+                select_statement += " ORDER BY " + str.join(" ,",
+                                                            ["{} {}".format(o, order_by[o]) for o in order_by.keys()])
+            cursor.execute(select_statement)
+            result = cursor.fetchall()
+            # column_names = [desc[0] for desc in cursor.description]
+            return result
