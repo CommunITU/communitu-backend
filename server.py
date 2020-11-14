@@ -1,5 +1,7 @@
 from flask import Flask
+from flask_cors import CORS
 
+from app.controllers.auth_controller import auth_api
 from app.repository.event_repository import EventRepository
 from app.repository.user_repository import UserRepository
 from app.controllers.event_controller import event_api
@@ -7,6 +9,7 @@ from app.controllers.event_controller import event_api
 
 def register_controllers(m_app):
     m_app.register_blueprint(event_api)  # register event controller
+    m_app.register_blueprint(auth_api)  # register auth controller
 
 
 def init_db():
@@ -16,6 +19,7 @@ def init_db():
 
 def init_app():
     m_app = Flask(__name__)
+    cors = CORS(m_app, resources={r"/*": {"origins": "*"}})
     register_controllers(m_app)
     init_db()
     return m_app
