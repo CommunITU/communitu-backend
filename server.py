@@ -1,6 +1,7 @@
 from flask import Flask
 from flask_cors import CORS
 
+from app.constants.app_constants import TOKEN_SECRET_KEY
 from app.controllers.auth_controller import auth_api
 from app.repository.event_repository import EventRepository
 from app.repository.user_repository import UserRepository
@@ -19,7 +20,8 @@ def init_db():
 
 def init_app():
     m_app = Flask(__name__)
-    cors = CORS(m_app, resources={r"/*": {"origins": "*"}})
+    CORS(m_app, resources={r"/*": {"origins": "*"}})
+    m_app.config['SECRET_KEY'] = TOKEN_SECRET_KEY
     register_controllers(m_app)
     init_db()
     return m_app

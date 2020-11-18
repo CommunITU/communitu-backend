@@ -10,3 +10,7 @@ DB_CONN_ERR = """
 AUTH_CREDENTIALS_NOT_CORRECT = """ 
                 Authentication failed. Credentials are not correct.
             """
+
+USER_IS_NOT_AUTHENTICATED = """ 
+                User is not authenticated.
+            """

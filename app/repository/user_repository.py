@@ -26,3 +26,5 @@ class UserRepository(BaseRepository):
         user = super().select(where={"email": email, "password": password})
         if not user:
             raise AuthCredentialsError(AUTH_CREDENTIALS_NOT_CORRECT)
+
+        return user
