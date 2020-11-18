@@ -30,12 +30,12 @@ def require_token(request):
                 return make_response("Token is not correct.", 403,
                                      {'WWW-Authenticate': 'Basic realm="Token is not correct."'})
             try:
-                data = jwt.decode(token, current_app.config['SECRET_KEY'])
-                print(data)
+                token_data = jwt.decode(token, current_app.config['SECRET_KEY'])
             except Exception as e:
                 return make_response(str(e), 403, {'WWW-Authenticate': 'Basic realm="Token is not correct."'})
 
-            res = func(*args, **kwargs)  # If token is valid, execute the real function
+            res = func(user_email=token_data['username'], *args,
+                       **kwargs)  # If token is valid, execute the real function
             return res
 
         return wrapper
