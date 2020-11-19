@@ -55,3 +55,14 @@ def login(email, password):
     token = jwt.encode(
         claims, current_app.config['SECRET_KEY'], algorithm='HS256').decode('UTF-8')
     return {'token': token, 'user': user}
+
+
+def login_with_token(token):
+    """
+       If the JWT token is valid, perform authentication of user.
+       :param token
+       :return: Authenticated user data.
+       """
+    data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+    user = user_repo.get_user_by_email(data['username'])
+    return {'user': user}

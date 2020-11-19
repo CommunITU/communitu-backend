@@ -13,3 +13,10 @@ class UserNotAuthenticatedError(Exception):
 
     def __init__(self, msg):
         self.msg = msg
+
+
+class NoSuchUserError(Exception):
+    """   Raises if there is not an user with given parameters """
+
+    def __init__(self, msg):
+        self.msg = msg

@@ -14,3 +14,7 @@ AUTH_CREDENTIALS_NOT_CORRECT = """
 USER_IS_NOT_AUTHENTICATED = """ 
                 User is not authenticated.
             """
+
+NO_SUCH_USER_WITH_GIVEN_EMAIL = """ 
+                There is not an user with given email.
+            """
