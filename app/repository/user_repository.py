@@ -27,4 +27,4 @@ class UserRepository(BaseRepository):
         if not user:
             raise AuthCredentialsError(AUTH_CREDENTIALS_NOT_CORRECT)
 
-        return user
+        return user.__getitem__(0)

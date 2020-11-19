@@ -2,6 +2,7 @@ from flask import Blueprint, request, make_response, jsonify
 
 from app.exceptions.auth_exceptions import AuthCredentialsError
 from app.services import auth_service
+from app.util.map_to_dto import user_model_dto, map_to_dto
 
 auth_api = Blueprint('auth_api', __name__)
 
@@ -20,7 +21,8 @@ def login():
         login_data = auth_service.login(data['email'], data['password'])
         jwt_token = login_data['token']
         user = login_data['user']
-        return make_response(jsonify({'token': jwt_token, 'user': user}), 200,
+        user_dto = map_to_dto(user, user_model_dto)
+        return make_response(jsonify({'token': jwt_token, 'user': user_dto}), 200,
                              {'WWW-Authenticate': 'Basic realm="Logged in successfully."'})
     except AuthCredentialsError as auth_error:
         return make_response(str(auth_error), 401, {'WWW-Authenticate': 'Basic realm="Login Required!"'})
