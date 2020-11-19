@@ -72,5 +72,8 @@ class BaseRepository:
                                                             ["{} {}".format(o, order_by[o]) for o in order_by.keys()])
             cursor.execute(select_statement)
             result = cursor.fetchall()
-            # column_names = [desc[0] for desc in cursor.description]
-            return result
+            column_names = [desc[0] for desc in cursor.description]
+
+            # Map columns names with the columns values which are in the result array.
+            result_dict = [dict(map(lambda x, y: (x, y), column_names, event)) for event in result]
+            return result_dict

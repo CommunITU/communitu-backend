@@ -1,5 +1,3 @@
-import json
-
 from flask import Blueprint, request, make_response, jsonify
 
 from app.exceptions.auth_exceptions import AuthCredentialsError
