@@ -1,5 +1,5 @@
 from app.repository.base_repository import BaseRepository
-from app.constants.database_constants import EVENT_DB_TABLE_INIT_STAT
+from app.constants.database_constants import EVENT_DB_TABLE_INIT_STAT, USER_EVENT_RELATION_TABLE_INIT_STAT
 from app.constants.database_constants import EVENT_DB_TABLE_NAME
 
 
@@ -13,6 +13,7 @@ class EventRepository(BaseRepository):
 
     def initialize_table(self):
         super().initialize_table(initialization_statement=EVENT_DB_TABLE_INIT_STAT)
+        super().initialize_table(initialization_statement=USER_EVENT_RELATION_TABLE_INIT_STAT)
 
     def create_event(self, event_data):
         """
