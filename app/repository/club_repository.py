@@ -1,5 +1,5 @@
 from app.repository.base_repository import BaseRepository
-from app.constants.database_constants import CLUB_DB_TABLE_INIT_STAT, LINKER_CLUB_EVENT_TABLE_INIT_STAT, \
+from app.constants.database_constants import CLUB_TABLE_INIT_STAT, LINKER_CLUB_EVENT_TABLE_INIT_STAT, \
     LINKER_CLUB_USER_EXECUTIVE_TABLE_INIT_STAT, CLUB_DB_TABLE_NAME, LINKER_CLUB_USER_PARTICIPANT_TABLE_INIT_STAT
 
 
@@ -13,7 +13,7 @@ class ClubRepository(BaseRepository):
 
     def initialize_table(self):
         # Initialize main table
-        super().initialize_table(initialization_statement=CLUB_DB_TABLE_INIT_STAT)
+        super().initialize_table(initialization_statement=CLUB_TABLE_INIT_STAT)
 
         # Initialize linker tables
         super().initialize_table(initialization_statement=LINKER_CLUB_EVENT_TABLE_INIT_STAT)

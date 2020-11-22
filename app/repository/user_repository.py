@@ -1,6 +1,6 @@
 from app.constants.error_messages import AUTH_CREDENTIALS_NOT_CORRECT, NO_SUCH_USER_WITH_GIVEN_EMAIL
 from app.repository.base_repository import BaseRepository
-from app.constants.database_constants import USER_DB_TABLE_INIT_STAT
+from app.constants.database_constants import USER_TABLE_INIT_STAT
 from app.constants.database_constants import USER_DB_TABLE_NAME
 from app.exceptions.auth_exceptions import AuthCredentialsError, NoSuchUserError
 
@@ -14,7 +14,7 @@ class UserRepository(BaseRepository):
         super().__init__(table=USER_DB_TABLE_NAME)
 
     def initialize_table(self):
-        super().initialize_table(initialization_statement=USER_DB_TABLE_INIT_STAT)
+        super().initialize_table(initialization_statement=USER_TABLE_INIT_STAT)
 
     def authenticate(self, email, password):
         """

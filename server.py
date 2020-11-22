@@ -3,6 +3,7 @@ from flask_cors import CORS
 
 from app.constants.app_constants import TOKEN_SECRET_KEY
 from app.controllers.auth_controller import auth_api
+from app.repository.authority_repository import AuthorityRepository
 from app.repository.club_repository import ClubRepository
 from app.repository.comment_repository import CommentRepository
 from app.repository.event_repository import EventRepository
@@ -17,6 +18,7 @@ def register_controllers(m_app):
 
 def init_db():
     UserRepository().initialize_table()  # init user table
+    AuthorityRepository().initialize_table()  # init authority table
     ClubRepository().initialize_table()  # init club table
     EventRepository().initialize_table()  # init event table
     CommentRepository().initialize_table()  # init comment table
