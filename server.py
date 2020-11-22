@@ -19,8 +19,8 @@ def register_controllers(m_app):
 def init_db():
     UserRepository().initialize_table()  # init user table
     AuthorityRepository().initialize_table()  # init authority table
-    ClubRepository().initialize_table()  # init club table
     EventRepository().initialize_table()  # init event table
+    ClubRepository().initialize_table()  # init club table
     CommentRepository().initialize_table()  # init comment table
 
 
