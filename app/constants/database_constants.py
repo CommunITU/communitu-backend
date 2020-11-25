@@ -3,6 +3,7 @@
 DB_CONNECTION_URL = "postgres://postgres:postgres@localhost:5432/communitu-db"
 
 """ Table names """
+# TODO ADD ALL TABLE NAMES
 EVENT_DB_TABLE_NAME = "event"
 USER_DB_TABLE_NAME = "_user"
 CLUB_DB_TABLE_NAME = "club"

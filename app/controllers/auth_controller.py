@@ -1,7 +1,7 @@
 from flask import Blueprint, request, make_response, jsonify
 from jwt import InvalidTokenError, DecodeError
 
-from app.exceptions.auth_exceptions import AuthCredentialsError
+from app.exceptions.auth_exceptions import AuthCredentialsError, NoSuchUserError
 from app.services import auth_service
 from app.util.map_to_dto import user_model_dto, map_to_dto
 
@@ -53,3 +53,7 @@ def login_with_token():
     except DecodeError as error:
         return make_response(jsonify({'message': str(error).strip()}), 401,
                              {'WWW-Authenticate': 'Basic realm="Token decode error!"'})
+
+    except NoSuchUserError as error:
+        return make_response(jsonify({'message': str(error).strip()}), 401,
+                             {'WWW-Authenticate': 'Basic realm="Credentials are not correct!"'})
