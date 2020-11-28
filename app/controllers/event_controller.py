@@ -11,7 +11,7 @@ er = EventRepository()
 
 @event_api.route("/events", methods=['POST'])
 @require_token(request)
-def create_event(user_email=""):
+def create_event(user_id=""):
     """
     Handle api requests to create new event.
 
@@ -26,7 +26,7 @@ def create_event(user_email=""):
     }
     :return: HTTP Status
     """
-    print(user_email)
+    print(user_id)
     # er.create_event(request.get_json())
     return "ok"
 

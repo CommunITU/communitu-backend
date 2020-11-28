@@ -56,7 +56,7 @@ class BaseRepository:
             select_statement = " SELECT {}".format(str.join(", ", return_columns) if return_columns else "* ")
 
             # Add 'from' clause
-            select_statement += " FROM {}".format((str.join(", ", from_tables)) if return_columns else self.table)
+            select_statement += " FROM {}".format((str.join(", ", from_tables)) if from_tables else self.table)
 
             # Add 'where' clause
             if where:

@@ -41,3 +41,16 @@ class UserRepository(BaseRepository):
             raise NoSuchUserError(NO_SUCH_USER_WITH_GIVEN_EMAIL)
 
         return user.__getitem__(0)
+
+    def get_user_id_by_email(self, email):
+        """
+        Get user ID by email.
+
+        :raise: NoSuchUserError if there is not an user with given email.
+        """
+
+        user_id = super().select(where={"email": email}, return_columns=["id"])
+        if not user_id:
+            raise NoSuchUserError(NO_SUCH_USER_WITH_GIVEN_EMAIL)
+
+        return user_id.__getitem__(0)

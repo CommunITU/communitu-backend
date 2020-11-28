@@ -1,8 +1,9 @@
 from flask import Blueprint, request, make_response, jsonify
-from jwt import InvalidTokenError, DecodeError
+from jwt import DecodeError
 
 from app.exceptions.auth_exceptions import AuthCredentialsError, NoSuchUserError
 from app.services import auth_service
+from app.services.auth_service import require_token
 from app.util.map_to_dto import user_model_dto, map_to_dto
 
 auth_api = Blueprint('auth_api', __name__)
@@ -34,20 +35,16 @@ def login():
 
 
 @auth_api.route("/auth/login_with_token", methods=['POST'])
-def login_with_token():
+@require_token(request)
+def login_with_token(user):
     """
     Login with JWT token.
     :Request body : { token: string }
 
     :return: Logged-in user data
     """
-
-    data = request.get_json()
     try:
-
-        jwt_token = data['login_token']
-        data = auth_service.login_with_token(jwt_token)
-        user_dto = map_to_dto(data['user'], user_model_dto)  # Map 'user dao' to 'user dto'
+        user_dto = map_to_dto(user, user_model_dto)  # Map 'user dao' to 'user dto'
         return make_response(jsonify({'user': user_dto}), 200,
                              {'WWW-Authenticate': 'Basic realm="Logged in successfully."'})
     except DecodeError as error:

@@ -1,7 +1,9 @@
+import inspect
 from functools import wraps
 
 from flask import current_app, make_response
 
+from app.exceptions.auth_exceptions import NoSuchUserError
 from app.repository.user_repository import UserRepository
 import jwt
 import datetime
@@ -30,12 +32,25 @@ def require_token(request):
                 return make_response("Token is not correct.", 403,
                                      {'WWW-Authenticate': 'Basic realm="Token is not correct."'})
             try:
-                token_data = jwt.decode(token, current_app.config['SECRET_KEY'])
+                token_data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
+                user_email = token_data['username']
+
+                required_params = {}
+                func_params = inspect.getfullargspec(func).args
+                if func_params.__contains__("user_id"):
+                    required_params['user_id'] = user_repo.get_user_id_by_email(email=user_email)
+                if func_params.__contains__("user_email"):
+                    required_params['user_email'] = user_email
+                if func_params.__contains__("user"):
+                    required_params['user'] = user_repo.get_user_by_email(email=user_email)
+
+            except NoSuchUserError as e:
+                return make_response(str(e), 403,
+                                     {'WWW-Authenticate': 'Basic realm="No such user with given email."'})
             except Exception as e:
                 return make_response(str(e), 403, {'WWW-Authenticate': 'Basic realm="Token is not correct."'})
+            res = func(*args, **kwargs, **required_params)  # If token is valid, execute the real function
 
-            res = func(user_email=token_data['username'], *args,
-                       **kwargs)  # If token is valid, execute the real function
             return res
 
         return wrapper
