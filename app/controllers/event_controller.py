@@ -1,4 +1,3 @@
-from app.models.event_model import EventModel
 from app.repository.event_repository import EventRepository
 from flask import Blueprint, request, jsonify, make_response
 
@@ -6,7 +5,7 @@ from app.services.auth_service import require_token
 from app.util.map_to_dto import map_to_dto, event_model_dto
 
 event_api = Blueprint('event_api', __name__)
-er = EventRepository()
+er = EventRepository
 
 
 @event_api.route("/events", methods=['POST'])

@@ -11,7 +11,8 @@ class AuthorityRepository(BaseRepository):
     def __init__(self):
         super().__init__(table=AUTHORITY_DB_TABLE_NAME)
 
-    def initialize_table(self):
+    @classmethod
+    def initialize_table(cls):
         # Initialize main table
         super().initialize_table(initialization_statement=AUTHORITY_TABLE_INIT_STAT)
 

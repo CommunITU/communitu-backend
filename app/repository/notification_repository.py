@@ -11,7 +11,8 @@ class NotificationRepository(BaseRepository):
     def __init__(self):
         super().__init__(table=NOTIFICATION_TABLE_NAME)
 
-    def initialize_table(self):
+    @classmethod
+    def initialize_table(cls):
         # Initialize main tables
         super().initialize_table(initialization_statement=NOTIFICATION_TABLE_INIT_STAT)
         super().initialize_table(initialization_statement=NOTIFICATION_TYPE_TABLE_INIT_STAT)

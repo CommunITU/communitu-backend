@@ -11,6 +11,7 @@ class CommentRepository(BaseRepository):
     def __init__(self):
         super().__init__(table=COMMENT_DB_TABLE_NAME)
 
-    def initialize_table(self):
+    @classmethod
+    def initialize_table(cls):
         super().initialize_table(initialization_statement=COMMENT_TABLE_INIT_STAT)
         super().initialize_table(initialization_statement=LINKER_COMMENT_REPLY_TABLE_INIT_STAT)

@@ -1,5 +1,6 @@
 from functools import wraps
 import psycopg2 as dbapi2
+import datetime
 from psycopg2._psycopg import OperationalError
 
 from app.constants.database_constants import DB_CONNECTION_URL
@@ -28,3 +29,18 @@ def require_sql_connection(func):
             raise DatabaseConnectionError(DB_CONN_ERR)
 
     return wrapper
+
+
+class PopulatingData:
+    """
+        Populate database with the fake data for the initial state of the program.
+    """
+
+    @classmethod
+    def get_initial_events(cls):
+        events = ({"title": "My Event 1", "explanation": "Event description 1", "start_date": datetime.datetime.now(),
+                   "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
+                  {"title": "My Event 2", "explanation": "Event description 1", "start_date": datetime.datetime.now(),
+                   "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)}
+                  )
+        return events

@@ -13,7 +13,8 @@ class UserRepository(BaseRepository):
     def __init__(self):
         super().__init__(table=USER_DB_TABLE_NAME)
 
-    def initialize_table(self):
+    @classmethod
+    def initialize_table(cls):
         super().initialize_table(initialization_statement=USER_TABLE_INIT_STAT)
 
     def authenticate(self, email, password):

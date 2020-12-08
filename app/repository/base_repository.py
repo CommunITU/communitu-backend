@@ -7,8 +7,9 @@ class BaseRepository:
     def __init__(self, table):
         self.table = table
 
+    @classmethod
     @require_sql_connection
-    def initialize_table(self, connection, initialization_statement):
+    def initialize_table(cls, connection, initialization_statement):
         """
 
         :param connection:          Provided by @require_sql_decorator. Do not specify in function calls explicitly.
@@ -16,6 +17,15 @@ class BaseRepository:
         """
         with connection.cursor() as cursor:
             cursor.execute(initialization_statement)
+
+    def populate_table(self, initial_data):
+        """
+        Populate table with initial data.
+        :param initial_data:    An array structure contains initial data for the table
+        """
+
+        for row in initial_data:
+            self.create(row)
 
     @require_sql_connection
     def create(self, data, connection=None):

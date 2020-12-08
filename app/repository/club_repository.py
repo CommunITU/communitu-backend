@@ -11,7 +11,8 @@ class ClubRepository(BaseRepository):
     def __init__(self):
         super().__init__(table=CLUB_DB_TABLE_NAME)
 
-    def initialize_table(self):
+    @classmethod
+    def initialize_table(cls):
         # Initialize main table
         super().initialize_table(initialization_statement=CLUB_TABLE_INIT_STAT)
 
