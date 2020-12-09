@@ -17,6 +17,14 @@ class UserRepository(BaseRepository):
     def initialize_table(cls):
         super().initialize_table(initialization_statement=USER_TABLE_INIT_STAT)
 
+    @classmethod
+    def create_user(cls, user_data):
+        """
+        Create new event on database.
+        :param user_data The map that contains the user field and corresponding value.
+        """
+        cls.add(user_data, table_name=USER_TABLE_NAME)
+
     def authenticate(self, email, password):
         """
         Check given credentials.

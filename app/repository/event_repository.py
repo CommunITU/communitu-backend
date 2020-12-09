@@ -10,7 +10,8 @@ class EventRepository(BaseRepository):
         Performs all database operations related to event objects.
     """
 
-    def __init__(self):
+    @classmethod
+    def __init__(cls):
         super().__init__(table=EVENT_TABLE_NAME)
 
     @classmethod
@@ -30,7 +31,7 @@ class EventRepository(BaseRepository):
         Create new event on database.
         :param event_data The map that contains the event field and corresponding value.
         """
-        cls.create(event_data)
+        cls.add(event_data, table_name=EVENT_TABLE_NAME)
 
     @classmethod
     def get_all_events(cls):

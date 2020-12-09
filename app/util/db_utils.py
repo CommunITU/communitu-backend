@@ -40,13 +40,47 @@ def clean_database(connection):
         cursor.execute("DROP SCHEMA public CASCADE; CREATE SCHEMA public; ")
 
 
-class PopulatingData:
+class PopulateInitialDatabase:
     """
         Populate database with the fake data for the initial state of the program.
     """
 
     @classmethod
-    def get_initial_events(cls):
+    def populate(cls):
+        from app.repository.user_repository import UserRepository as user_repo
+        from app.repository.club_repository import ClubRepository as club_repo
+        from app.repository.event_repository import EventRepository as event_repo
+        from app.repository.authority_repository import AuthorityRepository as auth_repo
+        cls.user_repo = user_repo
+        cls.club_repo = club_repo
+        cls.event_repo = event_repo
+        cls.auth_repo = auth_repo
+
+        cls.__populate_users()
+        cls.__populate_clubs()
+
+    @classmethod
+    def __populate_users(cls):
+
+        users = ({"email": "umut265@gmail.com", "password": "deneme", "name": "Umut Emre", "surname": "Bayramoglu"},
+                 {"email": "uebayramoglu@gmail.com", "password": "deneme", "name": "Umut Emre 2",
+                  "surname": "Bayramoglu 2"})
+
+        for user in users:
+            cls.user_repo.create_user(user_data=user)
+
+    @classmethod
+    def __populate_clubs(cls):
+
+        clubs = ({"name": "My Club 1", "description": "Hello My first club", "email": "umut265@gmail.com"},
+                 {"name": "My Club 2", "description": "Hello My second club", "email": "umut265@gmail.com"})
+
+        cls.club_repo.create_club(club_data=clubs[0], user_id_who_created=1)
+        cls.club_repo.create_club(club_data=clubs[1], user_id_who_created=2)
+
+    @classmethod
+    def __populate_events(cls):
+
         events = ({"title": "My Event 1", "explanation": "Event description 1", "quota": 100,
                    "start_date": datetime.datetime.now(),
                    "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
@@ -57,11 +91,15 @@ class PopulatingData:
                    "start_date": datetime.datetime.now(),
                    "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)}
                   )
-        return events
+
+        for event in events:
+            cls.event_repo.create_event(event_data=event)
 
     @classmethod
-    def get_initial_users(cls):
-        users = ({"email": "umut265@gmail.com", "password": "deneme", "name": "Umut Emre", "surname": "Bayramoglu"},
-                 {"email": "uebayramoglu@gmail.com", "password": "deneme", "name": "Umut Emre 2",
-                  "surname": "Bayramoglu 2"})
-        return users
+    def __populate_authorities(cls):
+
+        authorities = ({"authority": "admin"},
+                       {"authority": "user"})
+
+        for authority in authorities:
+            cls.auth_repo.create_user(user_data=authority)

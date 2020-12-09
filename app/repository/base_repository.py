@@ -4,8 +4,9 @@ from app.util.db_utils import require_sql_connection
 class BaseRepository:
     """ Base class for the repositories"""
 
-    def __init__(self, table):
-        self.table = table
+    @classmethod
+    def __init__(cls, table):
+        cls.table = table
 
     @classmethod
     @require_sql_connection
@@ -18,31 +19,31 @@ class BaseRepository:
         with connection.cursor() as cursor:
             cursor.execute(initialization_statement)
 
-    def populate_table(self, initial_data):
-        """
-        Populate table with initial data.
-        :param initial_data:    An array structure contains initial data for the table
-        """
-
-        for row in initial_data:
-            self.create(row)
-
+    @classmethod
     @require_sql_connection
-    def create(self, data, connection=None):
+    def add(cls, data, connection=None, table_name=None, return_id=False):
         """
         Creates new record on database based on passed data.
 
         :param data:        The dictionary that contains the data of the record will be created.
         :param connection:  Provided by @require_sql_decorator. Do not specify in function calls explicitly.
+        :param table_name:  The table that new record to be added to.
+        :param return_id:   Return id of added record
         """
         with connection.cursor() as cursor:
             create_statement = """INSERT INTO {}({}) VALUES({})
-                                """.format(self.table, str.join(", ", data.keys()),
+                                """.format(table_name if table_name else cls.table,
+                                           str.join(", ", data.keys()),
                                            str.join(", ", ["'{}'".format(str(val)) for val in data.values()]))
-            cursor.execute(create_statement)
+            if return_id:
+                create_statement += " RETURNING id"
 
+            cursor.execute(create_statement)
+            return cursor.fetchone()[0] if return_id else None
+
+    @classmethod
     @require_sql_connection
-    def select(self, connection=None, return_columns=[], from_tables=[],
+    def select(cls, connection=None, return_columns=[], from_tables=[],
                where={}, limit=None, order_by={}):
         """
         Query the database based on specified conditions.
@@ -66,7 +67,7 @@ class BaseRepository:
             select_statement = " SELECT {}".format(str.join(", ", return_columns) if return_columns else "* ")
 
             # Add 'from' clause
-            select_statement += " FROM {}".format((str.join(", ", from_tables)) if from_tables else self.table)
+            select_statement += " FROM {}".format((str.join(", ", from_tables)) if from_tables else cls.table)
 
             # Add 'where' clause
             if where:

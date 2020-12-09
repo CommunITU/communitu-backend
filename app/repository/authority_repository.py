@@ -18,3 +18,7 @@ class AuthorityRepository(BaseRepository):
 
         # Initialize linker tables
         super().initialize_table(initialization_statement=LINKER_USER_AUTHORITY_TABLE_INIT_STAT)
+
+    @classmethod
+    def create_authority(cls, authority):
+        super().add(authority, table_name=AUTHORITY_TABLE_NAME)

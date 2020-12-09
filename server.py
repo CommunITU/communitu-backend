@@ -11,7 +11,7 @@ from app.repository.comment_repository import CommentRepository
 from app.repository.event_repository import EventRepository
 from app.repository.notification_repository import NotificationRepository
 from app.repository.user_repository import UserRepository
-from app.util.db_utils import PopulatingData, clean_database
+from app.util.db_utils import PopulateInitialDatabase, clean_database
 
 
 def register_controllers(m_app):
@@ -34,9 +34,8 @@ def init_db():
     NotificationRepository.initialize_table()
     CommentRepository.initialize_table()
 
-    """ Populate tables """
-    EventRepository().populate_table(initial_data=PopulatingData.get_initial_events())
-    UserRepository().populate_table(initial_data=PopulatingData.get_initial_users())
+    """ Populate database """
+    PopulateInitialDatabase.populate()
 
 
 def init_app():
