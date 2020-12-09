@@ -31,6 +31,15 @@ def require_sql_connection(func):
     return wrapper
 
 
+@require_sql_connection
+def clean_database(connection):
+    """
+    Remove all tables in database
+    """
+    with connection.cursor() as cursor:
+        cursor.execute("DROP SCHEMA public CASCADE; CREATE SCHEMA public; ")
+
+
 class PopulatingData:
     """
         Populate database with the fake data for the initial state of the program.
@@ -38,9 +47,14 @@ class PopulatingData:
 
     @classmethod
     def get_initial_events(cls):
-        events = ({"title": "My Event 1", "explanation": "Event description 1", "start_date": datetime.datetime.now(),
+        events = ({"title": "My Event 1", "explanation": "Event description 1", "quota": 100,
+                   "start_date": datetime.datetime.now(),
                    "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
-                  {"title": "My Event 2", "explanation": "Event description 1", "start_date": datetime.datetime.now(),
+                  {"title": "My Event 2", "explanation": "Event description 2", "quota": 100,
+                   "start_date": datetime.datetime.now(),
+                   "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
+                  {"title": "My Event 3", "explanation": "Event description 3", "quota": 100,
+                   "start_date": datetime.datetime.now(),
                    "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)}
                   )
         return events

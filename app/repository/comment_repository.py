@@ -1,6 +1,6 @@
-from app.repository.base_repository import BaseRepository
 from app.constants.database_constants import COMMENT_TABLE_INIT_STAT, LINKER_COMMENT_REPLY_TABLE_INIT_STAT
-from app.constants.database_constants import COMMENT_DB_TABLE_NAME
+from app.constants.database_constants import COMMENT_TABLE_NAME
+from app.repository import BaseRepository
 
 
 class CommentRepository(BaseRepository):
@@ -9,7 +9,7 @@ class CommentRepository(BaseRepository):
     """
 
     def __init__(self):
-        super().__init__(table=COMMENT_DB_TABLE_NAME)
+        super().__init__(table=COMMENT_TABLE_NAME)
 
     @classmethod
     def initialize_table(cls):

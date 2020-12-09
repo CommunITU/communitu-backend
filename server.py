@@ -11,7 +11,7 @@ from app.repository.comment_repository import CommentRepository
 from app.repository.event_repository import EventRepository
 from app.repository.notification_repository import NotificationRepository
 from app.repository.user_repository import UserRepository
-from app.util.db_utils import PopulatingData
+from app.util.db_utils import PopulatingData, clean_database
 
 
 def register_controllers(m_app):
@@ -21,6 +21,11 @@ def register_controllers(m_app):
 
 
 def init_db():
+    """ Initialize database """
+
+    """ Remove old data. It is a config for the development, not production """
+    clean_database()
+
     """ Initialize tables """
     UserRepository.initialize_table()
     AuthorityRepository.initialize_table()
@@ -31,8 +36,6 @@ def init_db():
 
     """ Populate tables """
     EventRepository().populate_table(initial_data=PopulatingData.get_initial_events())
-
-
 
 
 def init_app():

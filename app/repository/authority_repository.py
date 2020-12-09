@@ -1,6 +1,6 @@
-from app.repository.base_repository import BaseRepository
-from app.constants.database_constants import AUTHORITY_DB_TABLE_NAME, AUTHORITY_TABLE_INIT_STAT, \
+from app.constants.database_constants import AUTHORITY_TABLE_NAME, AUTHORITY_TABLE_INIT_STAT, \
     LINKER_USER_AUTHORITY_TABLE_INIT_STAT
+from app.repository import BaseRepository
 
 
 class AuthorityRepository(BaseRepository):
@@ -9,7 +9,7 @@ class AuthorityRepository(BaseRepository):
     """
 
     def __init__(self):
-        super().__init__(table=AUTHORITY_DB_TABLE_NAME)
+        super().__init__(table=AUTHORITY_TABLE_NAME)
 
     @classmethod
     def initialize_table(cls):

@@ -1,6 +1,5 @@
-from app.repository.base_repository import BaseRepository
 from app.constants.database_constants import EVENT_TABLE_INIT_STAT, EVENT_REGISTRATION_QUESTION_OPTION_TABLE_INIT_STAT
-from app.constants.database_constants import EVENT_DB_TABLE_NAME, EVENT_REGISTRATION_QUESTION_TABLE_INIT_STAT, \
+from app.constants.database_constants import EVENT_TABLE_NAME, EVENT_REGISTRATION_QUESTION_TABLE_INIT_STAT, \
     EVENT_REGISTRATION_QUESTION_USER_OPTION_ANSWER_TABLE_INIT_STAT, \
     EVENT_REGISTRATION_QUESTION_USER_TEXT_ANSWER_TABLE_INIT_STAT
 from app.repository import BaseRepository
@@ -12,7 +11,7 @@ class EventRepository(BaseRepository):
     """
 
     def __init__(self):
-        super().__init__(table=EVENT_DB_TABLE_NAME)
+        super().__init__(table=EVENT_TABLE_NAME)
 
     @classmethod
     def initialize_table(cls):
@@ -29,11 +28,12 @@ class EventRepository(BaseRepository):
     def create_event(cls, event_data):
         """
         Create new event on database.
-        :param event_data.
+        :param event_data The map that contains the event field and corresponding value.
         """
-        super().create(event_data)
+        cls.create(event_data)
 
-    def get_all_events(self):
+    @classmethod
+    def get_all_events(cls):
         """
         :return:  All events ordered by created date.
         """
