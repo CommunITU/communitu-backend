@@ -58,3 +58,10 @@ class PopulatingData:
                    "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)}
                   )
         return events
+
+    @classmethod
+    def get_initial_users(cls):
+        users = ({"email": "umut265@gmail.com", "password": "deneme", "name": "Umut Emre", "surname": "Bayramoglu"},
+                 {"email": "uebayramoglu@gmail.com", "password": "deneme", "name": "Umut Emre 2",
+                  "surname": "Bayramoglu 2"})
+        return users

@@ -36,6 +36,7 @@ def init_db():
 
     """ Populate tables """
     EventRepository().populate_table(initial_data=PopulatingData.get_initial_events())
+    UserRepository().populate_table(initial_data=PopulatingData.get_initial_users())
 
 
 def init_app():
