@@ -1,7 +1,5 @@
-from app.constants.database_constants import CLUB_TABLE_INIT_STAT, LINKER_CLUB_EVENT_CREATED_BY_TABLE_INIT_STAT, \
+from app.constants.database_constants import CLUB_TABLE_INIT_STAT, \
     LINKER_CLUB_USER_EXECUTIVE_TABLE_INIT_STAT, CLUB_TABLE_NAME, \
-    LINKER_CLUB_USER_PARTICIPANT_TABLE_NAME, \
-    LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME, \
     LINKER_CLUB_USER_CREATED_BY_TABLE_NAME, \
     LINKER_CLUB_USER_CREATED_BY_TABLE_INIT_STAT, \
     LINKER_CLUB_USER_PARTICIPANT_TABLE_INIT_STAT
@@ -24,7 +22,6 @@ class ClubRepository(BaseRepository):
 
         # Initialize linker tables
         super().initialize_table(initialization_statement=LINKER_CLUB_USER_CREATED_BY_TABLE_INIT_STAT)
-        super().initialize_table(initialization_statement=LINKER_CLUB_EVENT_CREATED_BY_TABLE_INIT_STAT)
         super().initialize_table(initialization_statement=LINKER_CLUB_USER_EXECUTIVE_TABLE_INIT_STAT)
         super().initialize_table(initialization_statement=LINKER_CLUB_USER_PARTICIPANT_TABLE_INIT_STAT)
 

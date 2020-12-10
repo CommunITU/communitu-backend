@@ -58,6 +58,8 @@ class PopulateInitialDatabase:
 
         cls.__populate_users()
         cls.__populate_clubs()
+        cls.__populate_events()
+        # todo: IMPLEMENT RELATIONS ON EVENTS.
 
     @classmethod
     def __populate_users(cls):
@@ -92,8 +94,9 @@ class PopulateInitialDatabase:
                    "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)}
                   )
 
-        for event in events:
-            cls.event_repo.create_event(event_data=event)
+        cls.event_repo.create_event(event_data=events[0], owner_club_id=1)
+        cls.event_repo.create_event(event_data=events[1], owner_club_id=2)
+        cls.event_repo.create_event(event_data=events[2], owner_club_id=1)
 
     @classmethod
     def __populate_authorities(cls):

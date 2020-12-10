@@ -1,7 +1,9 @@
-from app.constants.database_constants import EVENT_TABLE_INIT_STAT, EVENT_REGISTRATION_QUESTION_OPTION_TABLE_INIT_STAT
+from app.constants.database_constants import EVENT_TABLE_INIT_STAT, EVENT_REGISTRATION_QUESTION_OPTION_TABLE_INIT_STAT, \
+    LINKER_CLUB_EVENT_CREATED_BY_TABLE_NAME
 from app.constants.database_constants import EVENT_TABLE_NAME, EVENT_REGISTRATION_QUESTION_TABLE_INIT_STAT, \
     EVENT_REGISTRATION_QUESTION_USER_OPTION_ANSWER_TABLE_INIT_STAT, \
-    EVENT_REGISTRATION_QUESTION_USER_TEXT_ANSWER_TABLE_INIT_STAT
+    EVENT_REGISTRATION_QUESTION_USER_TEXT_ANSWER_TABLE_INIT_STAT, \
+    LINKER_CLUB_EVENT_CREATED_BY_TABLE_INIT_STAT
 from app.repository import BaseRepository
 
 
@@ -24,14 +26,22 @@ class EventRepository(BaseRepository):
             initialization_statement=EVENT_REGISTRATION_QUESTION_USER_TEXT_ANSWER_TABLE_INIT_STAT)
         super().initialize_table(
             initialization_statement=EVENT_REGISTRATION_QUESTION_USER_OPTION_ANSWER_TABLE_INIT_STAT)
+        super().initialize_table(
+            initialization_statement=LINKER_CLUB_EVENT_CREATED_BY_TABLE_INIT_STAT)
 
     @classmethod
-    def create_event(cls, event_data):
+    def create_event(cls, event_data, owner_club_id):
         """
         Create new event on database.
         :param event_data The map that contains the event field and corresponding value.
+        :param owner_club_id    Id of owner club
         """
-        cls.add(event_data, table_name=EVENT_TABLE_NAME)
+        # Create event
+        event_id = cls.add(event_data, table_name=EVENT_TABLE_NAME, return_id=True)
+
+        # Link event with owner club
+        map_event_club = {"club_id": owner_club_id, "event_id": event_id}
+        cls.add(map_event_club, table_name=LINKER_CLUB_EVENT_CREATED_BY_TABLE_NAME)
 
     @classmethod
     def get_all_events(cls):

@@ -29,8 +29,8 @@ def init_db():
     """ Initialize tables """
     UserRepository.initialize_table()
     AuthorityRepository.initialize_table()
-    EventRepository.initialize_table()
     ClubRepository.initialize_table()
+    EventRepository.initialize_table()
     NotificationRepository.initialize_table()
     CommentRepository.initialize_table()
 
