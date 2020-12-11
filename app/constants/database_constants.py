@@ -1,6 +1,9 @@
+import os
+
 """ Common class for the constants related to database  """
 
-DB_CONNECTION_URL = "postgres://postgres:postgres@localhost:5432/communitu-db"
+# DB_CONNECTION_URL = "postgres://postgres:postgres@localhost:5432/communitu-db"
+DB_CONNECTION_URL = os.environ.get('DATABASE_URL')
 
 """ Table names """
 EVENT_TABLE_NAME = "event"
