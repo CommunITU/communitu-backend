@@ -36,3 +36,15 @@ class ClubRepository(BaseRepository):
         super().add(map_user_club, table_name=LINKER_CLUB_USER_CREATED_BY_TABLE_NAME)
         super().add(map_user_club, table_name=LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME)
         super().add(map_user_club, table_name=LINKER_CLUB_USER_PARTICIPANT_TABLE_NAME)
+
+    @classmethod
+    def participate_to_club(cls, club_data, user_id_who_created):
+        # TODO COMPLETE THIS FUNCTION
+        club_id = super().add(club_data, table_name=CLUB_TABLE_NAME, return_id=True)
+        map_user_club = {"user_id": user_id_who_created,
+                         "club_id": club_id}
+
+        # Link the club with the user who created.
+        super().add(map_user_club, table_name=LINKER_CLUB_USER_CREATED_BY_TABLE_NAME)
+        super().add(map_user_club, table_name=LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME)
+        super().add(map_user_club, table_name=LINKER_CLUB_USER_PARTICIPANT_TABLE_NAME)
