@@ -3,7 +3,7 @@
 # DATABASE
 DB_CONN_ERR = """ 
                 Failed to connect database. Please make sure: 
-                1) Server is running 
+                1) Database server is running 
                 2) Connection url is valid """
 
 # AUTHENTICATION
