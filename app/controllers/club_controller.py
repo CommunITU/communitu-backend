@@ -1,5 +1,5 @@
 from app.repository.club_repository import ClubRepository
-from flask import Blueprint, request, jsonify, make_response
+from flask import Blueprint, request
 
 from app.services.auth_service import require_token
 

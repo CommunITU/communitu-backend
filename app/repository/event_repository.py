@@ -1,9 +1,11 @@
-from app.constants.database_constants import EVENT_TABLE_INIT_STAT, EVENT_REGISTRATION_QUESTION_OPTION_TABLE_INIT_STAT, \
-    LINKER_CLUB_EVENT_CREATED_BY_TABLE_NAME
-from app.constants.database_constants import EVENT_TABLE_NAME, EVENT_REGISTRATION_QUESTION_TABLE_INIT_STAT, \
+from app.constants.database_constants import EVENT_TABLE_INIT_STAT, \
+    EVENT_REGISTRATION_QUESTION_OPTION_TABLE_INIT_STAT, \
+    EVENT_TABLE_NAME, EVENT_REGISTRATION_QUESTION_TABLE_INIT_STAT, \
     EVENT_REGISTRATION_QUESTION_USER_OPTION_ANSWER_TABLE_INIT_STAT, \
     EVENT_REGISTRATION_QUESTION_USER_TEXT_ANSWER_TABLE_INIT_STAT, \
-    LINKER_CLUB_EVENT_CREATED_BY_TABLE_INIT_STAT
+    LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME, \
+    LINKER_EVENT_USER_PARTICIPANT_TABLE_INIT_STAT
+
 from app.repository import BaseRepository
 
 
@@ -27,7 +29,7 @@ class EventRepository(BaseRepository):
         super().initialize_table(
             initialization_statement=EVENT_REGISTRATION_QUESTION_USER_OPTION_ANSWER_TABLE_INIT_STAT)
         super().initialize_table(
-            initialization_statement=LINKER_CLUB_EVENT_CREATED_BY_TABLE_INIT_STAT)
+            initialization_statement=LINKER_EVENT_USER_PARTICIPANT_TABLE_INIT_STAT)
 
     @classmethod
     def create_event(cls, event_data, owner_club_id):
@@ -39,9 +41,11 @@ class EventRepository(BaseRepository):
         # Create event
         event_id = cls.add(event_data, table_name=EVENT_TABLE_NAME, return_id=True)
 
-        # Link event with owner club
-        map_event_club = {"club_id": owner_club_id, "event_id": event_id}
-        cls.add(map_event_club, table_name=LINKER_CLUB_EVENT_CREATED_BY_TABLE_NAME)
+        # TODO: EVENT DATA SHOULD CONTAIN OWNER_CLUB_ID
+
+        # # Link event with owner club
+        # map_event_club = {"club_id": owner_club_id, "event_id": event_id}
+        # cls.add(map_event_club, table_name=LINKER_CLUB_EVENT_CREATED_BY_TABLE_NAME)
 
     @classmethod
     def get_all_events(cls):

@@ -1,7 +1,5 @@
 from app.constants.database_constants import CLUB_TABLE_INIT_STAT, \
     LINKER_CLUB_USER_EXECUTIVE_TABLE_INIT_STAT, CLUB_TABLE_NAME, \
-    LINKER_CLUB_USER_CREATED_BY_TABLE_NAME, \
-    LINKER_CLUB_USER_CREATED_BY_TABLE_INIT_STAT, \
     LINKER_CLUB_USER_PARTICIPANT_TABLE_INIT_STAT, LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME, \
     LINKER_CLUB_USER_PARTICIPANT_TABLE_NAME
 
@@ -22,7 +20,6 @@ class ClubRepository(BaseRepository):
         super().initialize_table(initialization_statement=CLUB_TABLE_INIT_STAT)
 
         # Initialize linker tables
-        super().initialize_table(initialization_statement=LINKER_CLUB_USER_CREATED_BY_TABLE_INIT_STAT)
         super().initialize_table(initialization_statement=LINKER_CLUB_USER_EXECUTIVE_TABLE_INIT_STAT)
         super().initialize_table(initialization_statement=LINKER_CLUB_USER_PARTICIPANT_TABLE_INIT_STAT)
 
@@ -33,7 +30,6 @@ class ClubRepository(BaseRepository):
                          "club_id": club_id}
 
         # Link the club with the user who created.
-        super().add(map_user_club, table_name=LINKER_CLUB_USER_CREATED_BY_TABLE_NAME)
         super().add(map_user_club, table_name=LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME)
         super().add(map_user_club, table_name=LINKER_CLUB_USER_PARTICIPANT_TABLE_NAME)
 
@@ -45,6 +41,5 @@ class ClubRepository(BaseRepository):
                          "club_id": club_id}
 
         # Link the club with the user who created.
-        super().add(map_user_club, table_name=LINKER_CLUB_USER_CREATED_BY_TABLE_NAME)
         super().add(map_user_club, table_name=LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME)
         super().add(map_user_club, table_name=LINKER_CLUB_USER_PARTICIPANT_TABLE_NAME)

@@ -28,7 +28,7 @@ class BaseRepository:
         :param data:        The dictionary that contains the data of the record will be created.
         :param connection:  Provided by @require_sql_decorator. Do not specify in function calls explicitly.
         :param table_name:  The table that new record to be added to.
-        :param return_id:   Return id of added record
+        :param return_id:   Return id of added record if true,
         """
         with connection.cursor() as cursor:
             create_statement = """INSERT INTO {}({}) VALUES({})
