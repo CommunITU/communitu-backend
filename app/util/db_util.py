@@ -1,34 +1,8 @@
-from functools import wraps
-import psycopg2 as dbapi2
 import datetime
-from psycopg2._psycopg import OperationalError
 
-from app.constants.database_constants import DB_CONNECTION_URL
-from app.constants.error_messages import DB_CONN_ERR
-from app.exceptions.database_exceptions import DatabaseConnectionError
+from app.util.jwt_util import require_sql_connection
 
 """ Database utils the for the application  """
-
-
-def require_sql_connection(func):
-    """
-    Decorator for the functions which require the database connection.
-    Creates the database connection and passes it as an argument to given function .
-
-    :param func: The function to be executed.
-    :return: Returns the result/return value of the func.
-    """
-
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        try:
-            with dbapi2.connect(DB_CONNECTION_URL) as connection:
-                result = func(connection=connection, *args, **kwargs)
-            return result
-        except OperationalError:
-            raise DatabaseConnectionError(DB_CONN_ERR)
-
-    return wrapper
 
 
 @require_sql_connection
@@ -59,6 +33,7 @@ class PopulateInitialDatabase:
         cls.__populate_users()
         cls.__populate_clubs()
         cls.__populate_events()
+        cls.__populate_authorities()
         # todo: IMPLEMENT RELATIONS ON EVENTS.
 
     @classmethod
@@ -101,8 +76,11 @@ class PopulateInitialDatabase:
     @classmethod
     def __populate_authorities(cls):
 
-        authorities = ({"authority": "admin"},
-                       {"authority": "user"})
+        authorities = ({"authority": "ADMIN"},
+                       {"authority": "USER"})
 
         for authority in authorities:
-            cls.__auth_repo.create_user(user_data=authority)
+            cls.__auth_repo.create_authority(authority)
+
+        cls.__auth_repo.set_authority_of_user(authority="ADMIN", user_id=1)
+        cls.__auth_repo.set_authority_of_user(authority="USER", user_id=2)

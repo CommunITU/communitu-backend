@@ -1,4 +1,4 @@
-from app.util.db_utils import require_sql_connection
+from app.util.jwt_util import require_sql_connection
 
 
 class BaseRepository:

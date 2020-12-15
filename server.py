@@ -11,7 +11,7 @@ from app.repository.comment_repository import CommentRepository
 from app.repository.event_repository import EventRepository
 from app.repository.notification_repository import NotificationRepository
 from app.repository.user_repository import UserRepository
-from app.util.db_utils import PopulateInitialDatabase, clean_database
+from app.util.db_util import PopulateInitialDatabase, clean_database
 
 
 def register_controllers(m_app):

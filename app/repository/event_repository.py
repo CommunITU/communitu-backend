@@ -1,10 +1,12 @@
 from app.constants.database_constants import EVENT_TABLE_INIT_STAT, \
     EVENT_REGISTRATION_QUESTION_OPTION_TABLE_INIT_STAT, \
     EVENT_TABLE_NAME, EVENT_REGISTRATION_QUESTION_TABLE_INIT_STAT, \
-    EVENT_REGISTRATION_QUESTION_USER_OPTION_ANSWER_TABLE_INIT_STAT, \
-    EVENT_REGISTRATION_QUESTION_USER_TEXT_ANSWER_TABLE_INIT_STAT, \
-    LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME, \
-    LINKER_EVENT_USER_PARTICIPANT_TABLE_INIT_STAT
+    EVENT_REGISTRATION_CHOICE_TYPE_QUESTION_TABLE_INIT_STAT, \
+    EVENT_REGISTRATION_TEXT_TYPE_QUESTION_TABLE_INIT_STAT, \
+    LINKER_EVENT_USER_PARTICIPANT_TABLE_INIT_STAT, \
+    EVENT_REGISTRATION_QUESTION_USER_RESPONSE_TABLE_INIT_STAT, \
+    EVENT_REGISTRATION_QUESTION_TEXT_TYPE_USER_RESPONSE_TABLE_INIT_STAT, \
+    EVENT_REGISTRATION_QUESTION_CHOICE_TYPE_USER_RESPONSE_TABLE_INIT_STAT
 
 from app.repository import BaseRepository
 
@@ -23,11 +25,16 @@ class EventRepository(BaseRepository):
         # Initialize event table and another tables connected to an event.
         super().initialize_table(initialization_statement=EVENT_TABLE_INIT_STAT)
         super().initialize_table(initialization_statement=EVENT_REGISTRATION_QUESTION_TABLE_INIT_STAT)
+        super().initialize_table(initialization_statement=EVENT_REGISTRATION_CHOICE_TYPE_QUESTION_TABLE_INIT_STAT)
+        super().initialize_table(initialization_statement=EVENT_REGISTRATION_TEXT_TYPE_QUESTION_TABLE_INIT_STAT)
+
         super().initialize_table(initialization_statement=EVENT_REGISTRATION_QUESTION_OPTION_TABLE_INIT_STAT)
+        super().initialize_table(initialization_statement=EVENT_REGISTRATION_QUESTION_USER_RESPONSE_TABLE_INIT_STAT)
         super().initialize_table(
-            initialization_statement=EVENT_REGISTRATION_QUESTION_USER_TEXT_ANSWER_TABLE_INIT_STAT)
+            initialization_statement=EVENT_REGISTRATION_QUESTION_TEXT_TYPE_USER_RESPONSE_TABLE_INIT_STAT)
         super().initialize_table(
-            initialization_statement=EVENT_REGISTRATION_QUESTION_USER_OPTION_ANSWER_TABLE_INIT_STAT)
+            initialization_statement=EVENT_REGISTRATION_QUESTION_CHOICE_TYPE_USER_RESPONSE_TABLE_INIT_STAT)
+
         super().initialize_table(
             initialization_statement=LINKER_EVENT_USER_PARTICIPANT_TABLE_INIT_STAT)
 
