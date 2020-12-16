@@ -69,9 +69,9 @@ class PopulateInitialDatabase:
                    "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)}
                   )
 
-        cls.__event_repo.create_event(event_data=events[0], owner_club_id=1)
-        cls.__event_repo.create_event(event_data=events[1], owner_club_id=2)
-        cls.__event_repo.create_event(event_data=events[2], owner_club_id=1)
+        cls.__event_repo.create_event(event_data=events[0])
+        cls.__event_repo.create_event(event_data=events[1])
+        cls.__event_repo.create_event(event_data=events[2])
 
     @classmethod
     def __populate_authorities(cls):

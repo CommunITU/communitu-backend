@@ -39,11 +39,10 @@ class EventRepository(BaseRepository):
             initialization_statement=LINKER_EVENT_USER_PARTICIPANT_TABLE_INIT_STAT)
 
     @classmethod
-    def create_event(cls, event_data, owner_club_id):
+    def create_event(cls, event_data):
         """
         Create new event on database.
         :param event_data The map that contains the event field and corresponding value.
-        :param owner_club_id    Id of owner club
         """
         # Create event
         event_id = cls.add(event_data, table_name=EVENT_TABLE_NAME, return_id=True)

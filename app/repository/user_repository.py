@@ -62,4 +62,4 @@ class UserRepository(BaseRepository):
         if not user_id:
             raise NoSuchUserError(NO_SUCH_USER_WITH_GIVEN_EMAIL)
 
-        return user_id.__getitem__(0)
+        return user_id.__getitem__(0)["id"]

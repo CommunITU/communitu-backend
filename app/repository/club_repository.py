@@ -25,6 +25,7 @@ class ClubRepository(BaseRepository):
 
     @classmethod
     def create_club(cls, club_data, user_id_who_created):
+        club_data["created_by"] = user_id_who_created
         club_id = super().add(club_data, table_name=CLUB_TABLE_NAME, return_id=True)
         map_user_club = {"user_id": user_id_who_created,
                          "club_id": club_id}
