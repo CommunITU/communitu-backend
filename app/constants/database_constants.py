@@ -3,7 +3,7 @@ import os
 """ Common class for the constants related to database  """
 
 DB_CONNECTION_URL = "postgres://postgres:postgres@localhost:5432/communitu-db"
-# DB_CONNECTION_URL = "postgres://octzatlxqcygjs:561356912cd3a347f11e24eb2fb215a29af9025d942c55b6e733e9048af6bafc@ec2-52-44-235-121.compute-1.amazonaws.com:5432/d5k5c10dtjsul9"
+# DB_CONNECTION_URL = "postgres://tprazrlnbcurwe:376c51b7ea5c8e534660e5353d7d2522fae6b25da1fcc3e39bd1a87013b3d67a@ec2-54-236-122-55.compute-1.amazonaws.com:5432/dcaaq3773tvrsp"
 
 """ Table names """
 EVENT_TABLE_NAME = "event"
