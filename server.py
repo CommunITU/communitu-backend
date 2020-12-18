@@ -27,7 +27,7 @@ def init_db():
     clean_database()
 
     """ Initialize tables """
-    #UserRepository.initialize_table()
+    UserRepository.initialize_table()
     #AuthorityRepository.initialize_table()
     #ClubRepository.initialize_table()
     #EventRepository.initialize_table()
