@@ -40,8 +40,7 @@ def init_db():
 
 def init_app():
     m_app = Flask(__name__)
-    CORS(m_app, resources={r"/*": {"origins": "*"}})
-    m_app.config['CORS_HEADERS'] = 'Content-Type'
+    CORS(m_app)
     m_app.config['SECRET_KEY'] = TOKEN_SECRET_KEY
     init_db()
     register_controllers(m_app)
