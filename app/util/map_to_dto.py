@@ -1,9 +1,9 @@
 # DATA TRANSFER OBJECT MODELS
-event_model_dto = ['id', 'title', 'description', 'start_date', 'end_date']
+event_model_dto = ['id', 'title', 'explanation', 'image_url', 'start_date', 'end_date', 'quota', 'created_by']
 user_model_dto = ['id', 'email', 'name', 'surname']
 
 
-def map_to_dto(dao, dto_model):
+def map_to_dto(dao_obj, dto_model):
     """
     Converts data access object to data transfer object.
 
@@ -11,5 +11,5 @@ def map_to_dto(dao, dto_model):
     :param dto_model: A list that specifies the dto object fields.
     :return: Dto
     """
-    dto = {field: dao[field] for field in dto_model}
+    dto = {field: dao_obj[field] for field in dto_model}
     return dto

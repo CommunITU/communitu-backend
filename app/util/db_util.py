@@ -59,19 +59,31 @@ class PopulateInitialDatabase:
     def __populate_events(cls):
 
         events = ({"title": "My Event 1", "explanation": "Event description 1", "quota": 100, "created_by": 1,
-                   "start_date": datetime.datetime.now(),
+                   "start_date": datetime.datetime.now(), "image_url": "event6.png",
                    "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
-                  {"title": "My Event 2", "explanation": "Event description 2", "quota": 100, "created_by": 2,
-                   "start_date": datetime.datetime.now(),
+                  {"title": "My Event 2", "explanation": "Event description 2", "quota": 300, "created_by": 2,
+                   "start_date": datetime.datetime.now(), "image_url": "event5.png",
                    "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
-                  {"title": "My Event 3", "explanation": "Event description 3", "quota": 100, "created_by": 1,
-                   "start_date": datetime.datetime.now(),
+                  {"title": "My Event 3", "explanation": "Event description 3", "quota": 90, "created_by": 1,
+                   "start_date": datetime.datetime.now(), "image_url": "event4.png",
+                   "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
+                  {"title": "Youtube Talk", "explanation": "Event description 1", "quota": 65, "created_by": 1,
+                   "start_date": datetime.datetime.now(), "image_url": "event3.png",
+                   "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
+                  {"title": "Neuropsychology Day", "explanation": "Event description 2", "quota": 30, "created_by": 2,
+                   "start_date": datetime.datetime.now(), "image_url": "event2.png",
+                   "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
+                  {"title": "gRPC Workshop", "explanation": "Event description 3", "quota": 70, "created_by": 1,
+                   "start_date": datetime.datetime.now(), "image_url": "event1.png",
                    "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)}
                   )
 
         cls.__event_repo.create_event(event_data=events[0])
         cls.__event_repo.create_event(event_data=events[1])
         cls.__event_repo.create_event(event_data=events[2])
+        cls.__event_repo.create_event(event_data=events[3])
+        cls.__event_repo.create_event(event_data=events[4])
+        cls.__event_repo.create_event(event_data=events[5])
 
     @classmethod
     def __populate_authorities(cls):

@@ -58,4 +58,4 @@ class EventRepository(BaseRepository):
         """
         :return:  All events ordered by created date.
         """
-        return super().select(order_by={"created_at": "DESC"})
+        return super().select(order_by={"created_at": "DESC"}, from_tables=["event"])

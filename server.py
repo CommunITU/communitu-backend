@@ -28,19 +28,19 @@ def init_db():
 
     """ Initialize tables """
     UserRepository.initialize_table()
-    #AuthorityRepository.initialize_table()
-    #ClubRepository.initialize_table()
-    #EventRepository.initialize_table()
-    #NotificationRepository.initialize_table()
-    #CommentRepository.initialize_table()
+    AuthorityRepository.initialize_table()
+    ClubRepository.initialize_table()
+    EventRepository.initialize_table()
+    NotificationRepository.initialize_table()
+    CommentRepository.initialize_table()
 
     """ Populate database """
-    #PopulateInitialDatabase.populate()
+    PopulateInitialDatabase.populate()
 
 
 def init_app():
     m_app = Flask(__name__)
-    CORS(m_app)
+    CORS(m_app, resources={r"/*": {"origins": "*"}})
     m_app.config['SECRET_KEY'] = TOKEN_SECRET_KEY
     init_db()
     register_controllers(m_app)
