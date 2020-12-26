@@ -48,9 +48,11 @@ def login_with_token(user):
         return make_response(jsonify({'user': user_dto}), 200,
                              {'WWW-Authenticate': 'Basic realm="Logged in successfully."'})
     except DecodeError as error:
+        print(error)
         return make_response(jsonify({'message': str(error).strip()}), 401,
                              {'WWW-Authenticate': 'Basic realm="Token decode error!"'})
 
     except NoSuchUserError as error:
+        print(error)
         return make_response(jsonify({'message': str(error).strip()}), 401,
                              {'WWW-Authenticate': 'Basic realm="Credentials are not correct!"'})

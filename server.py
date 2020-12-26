@@ -24,23 +24,24 @@ def init_db():
     """ Initialize database """
 
     """ Remove old data. It is a config for the development, not production """
-    clean_database()
+    # clean_database()
 
     """ Initialize tables """
-    UserRepository.initialize_table()
-    AuthorityRepository.initialize_table()
-    ClubRepository.initialize_table()
-    EventRepository.initialize_table()
-    NotificationRepository.initialize_table()
-    CommentRepository.initialize_table()
+    # UserRepository.initialize_table()
+    # AuthorityRepository.initialize_table()
+    # ClubRepository.initialize_table()
+    # EventRepository.initialize_table()
+    # NotificationRepository.initialize_table()
+    # CommentRepository.initialize_table()
 
     """ Populate database """
-    PopulateInitialDatabase.populate()
+    # PopulateInitialDatabase.populate()
 
 
 def init_app():
     m_app = Flask(__name__)
     CORS(m_app, resources={r"/*": {"origins": "*"}})
+    m_app.config['CORS_HEADERS'] = 'Content-Type'
     m_app.config['SECRET_KEY'] = TOKEN_SECRET_KEY
     init_db()
     register_controllers(m_app)

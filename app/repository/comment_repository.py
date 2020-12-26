@@ -8,6 +8,8 @@ class CommentRepository(BaseRepository):
         Performs all database operations related to comment objects.
     """
 
+    #TODO MOVE THIS REPO TO EVENT
+
     def __init__(self):
         super().__init__(table=EVENT_COMMENT_TABLE_NAME)
 
