@@ -24,18 +24,18 @@ def init_db():
     """ Initialize database """
 
     """ Remove old data. It is a config for the development, not production """
-    clean_database()
+    # clean_database()
 
     """ Initialize tables """
-    UserRepository.initialize_table()
-    AuthorityRepository.initialize_table()
-    ClubRepository.initialize_table()
-    EventRepository.initialize_table()
-    NotificationRepository.initialize_table()
-    CommentRepository.initialize_table()
+    # UserRepository.initialize_table()
+    # AuthorityRepository.initialize_table()
+    # ClubRepository.initialize_table()
+    # EventRepository.initialize_table()
+    # NotificationRepository.initialize_table()
+    # CommentRepository.initialize_table()
 
     """ Populate database """
-    PopulateInitialDatabase.populate()
+    # PopulateInitialDatabase.populate()
 
 
 def init_app():
