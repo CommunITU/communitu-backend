@@ -10,6 +10,6 @@ def init_tables(connection):
 
 
 if __name__ == "__main__":
-    clean_database()
+    #clean_database()
     init_tables()
     PopulateInitialDatabase.populate()

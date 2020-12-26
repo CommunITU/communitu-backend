@@ -1,4 +1,6 @@
 import datetime
+import os
+
 from psycopg2._psycopg import OperationalError
 from functools import wraps
 import psycopg2 as dbapi2
@@ -21,7 +23,7 @@ def require_sql_connection(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         try:
-            with dbapi2.connect(DB_CONNECTION_URL) as connection:
+            with dbapi2.connect(os.environ['DB_CONNECTION_URL']) as connection:
                 result = func(connection=connection, *args, **kwargs)
             return result
         except OperationalError:
