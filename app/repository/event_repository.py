@@ -54,8 +54,9 @@ class EventRepository(BaseRepository):
         # cls.add(map_event_club, table_name=LINKER_CLUB_EVENT_CREATED_BY_TABLE_NAME)
 
     @classmethod
-    def get_all_events(cls):
+    def get_all_events(cls, page, size):
         """
         :return:  All events ordered by created date.
         """
-        return super().select(order_by={"created_at": "DESC"}, from_tables=["event"])
+        return super().select(order_by={"created_at": "DESC"}, from_tables=["event"],
+                              limit=size, offset=(page - 1) * size)

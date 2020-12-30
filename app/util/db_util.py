@@ -4,7 +4,6 @@ import os
 from psycopg2._psycopg import OperationalError
 from functools import wraps
 import psycopg2 as dbapi2
-from app.constants.database_constants import DB_CONNECTION_URL
 from app.constants.error_messages import DB_CONN_ERR
 from app.exceptions.database_exceptions import DatabaseConnectionError
 
@@ -23,7 +22,7 @@ def require_sql_connection(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
         try:
-            with dbapi2.connect(os.environ['DB_CONNECTION_URL']) as connection:
+            with dbapi2.connect(os.environ['DATABASE_URL']) as connection:
                 result = func(connection=connection, *args, **kwargs)
             return result
         except OperationalError:

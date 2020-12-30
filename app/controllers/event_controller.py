@@ -35,8 +35,14 @@ def get_all_events():
     """
     :return: All created events.
     """
+
+    # Parse request parameters
+    args = request.args
+    page = args['page']
+    size = args['size']
+
     # Get all events.
-    all_events = er.get_all_events()
+    all_events = er.get_all_events(page=int(page), size=int(size))
 
     # Convert fetched events to data transfer object.
     dto_list = [map_to_dto(event, event_model_dto) for event in all_events]

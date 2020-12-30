@@ -44,7 +44,7 @@ class BaseRepository:
     @classmethod
     @require_sql_connection
     def select(cls, connection=None, return_columns=[], from_tables=[],
-               where={}, limit=None, order_by={}):
+               where={}, limit=None, offset=None, order_by={}):
         """
         Query the database based on specified conditions.
 
@@ -73,14 +73,19 @@ class BaseRepository:
             if where:
                 select_statement += " WHERE " + str.join(" AND ", ["{}='{}'".format(w, where[w]) for w in where.keys()])
 
-            # Add 'limit' clause
-            if limit:
-                select_statement += " LIMIT " + str(limit)
-
             # Add 'order_by' clause
             if order_by:
                 select_statement += " ORDER BY " + str.join(" ,",
                                                             ["{} {}".format(o, order_by[o]) for o in order_by.keys()])
+
+            # Add 'limit' clause
+            if limit:
+                select_statement += " LIMIT " + str(limit)
+
+            # Add 'offset' clause
+            if offset:
+                select_statement += " OFFSET " + str(offset)
+
             cursor.execute(select_statement)
             result = cursor.fetchall()
             column_names = [desc[0] for desc in cursor.description]
