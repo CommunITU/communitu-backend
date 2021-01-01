@@ -1,5 +1,6 @@
 from flask import Blueprint, request, make_response, jsonify
 from jwt import DecodeError
+from psycopg2._psycopg import IntegrityError
 
 from app.exceptions.auth_exceptions import AuthCredentialsError, NoSuchUserError
 from app.services import auth_service
@@ -32,6 +33,27 @@ def login():
     except Exception as error:
         return make_response(jsonify({'message': str(error).strip()}), 401,
                              {'WWW-Authenticate': 'Basic realm="Login Required!"'})
+
+
+@auth_api.route("/auth/register", methods=['POST'])
+def register():
+    """
+    Login with email and password.
+    :Request body : { email : string, password: string }
+
+    :return: JWT token and logged-in user data as Http Response.
+    """
+
+    user_data = request.get_json()
+    try:
+        auth_service.register(user_data)  # Register
+        return make_response(jsonify({'message': "Account created successfully!"}), 200)
+
+    except IntegrityError:
+        return make_response(jsonify({'message': "Email already exists!"}), 400)
+
+    except Exception as error:
+        return make_response(jsonify({'message': str(error).strip()}), 400)
 
 
 @auth_api.route("/auth/login_with_token", methods=['POST'])

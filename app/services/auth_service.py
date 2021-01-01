@@ -81,3 +81,11 @@ def login_with_token(token):
     data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
     user = user_repo.get_user_by_email(data['username'])
     return {'user': user}
+
+
+def register(user_data):
+    """
+        Create new user
+        :return: A dictionary that contains user data (name, email, password).
+    """
+    user_repo.create_user({"name": user_data['name'], "email": user_data['email'], "password": user_data['password']})
