@@ -63,3 +63,16 @@ class UserRepository(BaseRepository):
             raise NoSuchUserError(NO_SUCH_USER_WITH_GIVEN_EMAIL)
 
         return user_id.__getitem__(0)["id"]
+
+    @classmethod
+    def get_clubs_executed_by_user(cls, user_id):
+        """
+            Return the clubs executed by user.
+
+        :param user_id: Executive user id
+        :return: List of clubs
+        """
+
+        # TODO: COMPLETE THIS FUNCTION
+        # clubs = super().select(where={"created_by": user_id})
+        return "will be completed"
