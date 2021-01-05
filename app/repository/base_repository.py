@@ -43,7 +43,7 @@ class BaseRepository:
 
     @classmethod
     @require_sql_connection
-    def select(cls, connection=None, return_columns=[], from_tables=[],
+    def select(cls, connection=None, return_columns=[], from_tables=[], join_statements=[],
                where={}, limit=None, offset=None, order_by={}):
         """
         Query the database based on specified conditions.
@@ -53,6 +53,7 @@ class BaseRepository:
         :param from_tables:         The list of table names that columns are to be selected from. Multiple tables names
                                     are usually required in 'JOIN' queries. So, not necessary to pass that argument if
                                     only one table (self.table) will be queried.
+        :param join_statements      Array of hard-coded join statements.
         :param where:               The dictionary of where conditions. The column names should be specified as key and
                                     conditions as value.
         :param limit:               The number of records that will be returned.
@@ -68,6 +69,10 @@ class BaseRepository:
 
             # Add 'from' clause
             select_statement += " FROM {}".format((str.join(", ", from_tables)) if from_tables else cls.table)
+
+            # Add join statements
+            if join_statements:
+                select_statement += " {}".format(str.join(" ", join_statements))
 
             # Add 'where' clause
             if where:

@@ -1,6 +1,7 @@
 from app.repository import BaseRepository
 from app.constants.error_messages import AUTH_CREDENTIALS_NOT_CORRECT, NO_SUCH_USER_WITH_GIVEN_EMAIL
-from app.constants.database_constants import USER_TABLE_INIT_STAT
+from app.constants.database_constants import USER_TABLE_INIT_STAT, CLUB_TABLE_NAME, \
+    LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME
 from app.constants.database_constants import USER_TABLE_NAME
 from app.exceptions.auth_exceptions import AuthCredentialsError, NoSuchUserError
 
@@ -65,14 +66,18 @@ class UserRepository(BaseRepository):
         return user_id.__getitem__(0)["id"]
 
     @classmethod
-    def get_clubs_executed_by_user(cls, user_id):
+    def get_clubs_executed_by_user(cls, user_id, return_columns):
         """
             Return the clubs executed by user.
 
         :param user_id: Executive user id
+        :param return_columns: The columns that will be returned
         :return: List of clubs
         """
 
-        # TODO: COMPLETE THIS FUNCTION
-        # clubs = super().select(where={"created_by": user_id})
-        return "will be completed"
+        join_statement = "LEFT OUTER JOIN " + LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME + " li ON li.club_id = id"
+
+        clubs = super().select(return_columns=return_columns, from_tables=[CLUB_TABLE_NAME],
+                               join_statements=[join_statement],
+                               where={"li.user_id": user_id})
+        return clubs

@@ -1,3 +1,4 @@
+import psycopg2
 from psycopg2._psycopg import IntegrityError
 from flask import Blueprint, request, make_response, jsonify
 
@@ -11,17 +12,26 @@ user_repo = UserRepository
 def get_clubs_of_user(user_id):
     # Parse request parameters
     args = request.args
-    user_role = args['role']
+
+    if 'role' in args:
+        user_role = args['role']
+    else:
+        return make_response(jsonify({'message': "Role parameter should be specified!"}), 400)
 
     if user_role == "participant":
         # TODO: get clubs that user participated
         pass
     elif user_role == "executive":
-        # TODO: get clubs executed by given user
-        clubs = user_repo.get_clubs_executed_by_user(user_id=user_id)
-        pass
 
+        if 'fields' not in args:
+            return make_response({'message': "Fields should be specified! "}, 400)
+
+        try:
+            fields = args['fields'].split(",")
+            clubs = user_repo.get_clubs_executed_by_user(user_id=user_id, return_columns=fields)
+            return make_response(jsonify({"clubs": clubs, 'message': "Clubs fetched successfully!"}), 200)
+
+        except psycopg2.errors.UndefinedColumn:
+            return make_response(jsonify({'message': "Field parameters are not correct!"}), 400)
     else:
         return make_response(jsonify({'message': "Role parameter is not correct!"}), 400)
-
-    return "okey"
