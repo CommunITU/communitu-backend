@@ -1,5 +1,6 @@
 # DATA TRANSFER OBJECT MODELS
-event_model_dto = ['id', 'title', 'explanation', 'image_url', 'start_date', 'end_date', 'quota', 'created_by']
+event_model_dto = ['id', 'name', 'description', 'image_url', 'start_date', 'end_date', 'location', 'quota',
+                   'created_by']
 user_model_dto = ['id', 'email', 'name', 'surname']
 
 

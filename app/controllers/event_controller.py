@@ -1,3 +1,5 @@
+from psycopg2._psycopg import IntegrityError
+
 from app.repository.event_repository import EventRepository
 from flask import Blueprint, request, jsonify, make_response
 
@@ -5,7 +7,7 @@ from app.services.auth_service import require_token
 from app.util.map_to_dto import map_to_dto, event_model_dto
 
 event_api = Blueprint('event_api', __name__)
-er = EventRepository
+event_repo = EventRepository
 
 
 @event_api.route("/events", methods=['POST'])
@@ -16,18 +18,25 @@ def create_event(user_id=""):
 
     :Request body:
     {
-        title: string,
+        name: string,
         description: string,
         start_date: timestamp,
         end_date: timestamp,
+        location: string,
+        club_selection, integer,
         quota: integer,
-        owner_id: owner user id
+        registration_questions: array
     }
     :return: HTTP Status
     """
-    print(user_id)
-    # er.create_event(request.get_json())
-    return "ok"
+    req_json = request.get_json()
+
+    event_data = req_json['event_data']
+
+    event_repo.create_event(event_data)
+
+    # return make_response(jsonify({'message': "Club created successfully!"}), 200)
+    return "anan"
 
 
 @event_api.route("/events", methods=['GET'])
@@ -42,7 +51,7 @@ def get_all_events():
     size = args['size']
 
     # Get all events.
-    all_events = er.get_all_events(page=int(page), size=int(size))
+    all_events = event_repo.get_all_events(page=int(page), size=int(size))
 
     # Convert fetched events to data transfer object.
     dto_list = [map_to_dto(event, event_model_dto) for event in all_events]
