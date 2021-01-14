@@ -58,7 +58,6 @@ class EventRepository(BaseRepository):
 
         if 'registration_questions' in event_data:
             registration_questions = event_data['registration_questions']
-            print(registration_questions)
             for question in registration_questions.values():
                 new_question_obj = {'title': question['title'], 'explanation': question['explanation'],
                                     'is_mandatory': True, 'question_type': question['question_type'],
@@ -81,14 +80,18 @@ class EventRepository(BaseRepository):
                     cls.add(data={'id': question_id},
                             table_name=EVENT_REGISTRATION_TEXT_TYPE_QUESTION_TABLE_NAME)
 
-        # # Link event with owner club
-        # map_event_club = {"club_id": club_id, "event_id": event_id}
-        # cls.add(data=map_event_club, table_name=LINKER_EVENT_CLUB_ORGANIZER_TABLE_NAME)
-
     @classmethod
     def get_all_events(cls, page, size):
         """
         :return:  All events ordered by created date.
         """
-        return super().select(order_by={"created_at": "DESC"}, from_tables=["event"],
+        return super().select(order_by={"created_at": "DESC"}, from_tables=[EVENT_TABLE_NAME],
                               limit=size, offset=(page - 1) * size)
+
+    @classmethod
+    def get_event_by_id(cls, id):
+        """
+        :return: Event
+        """
+
+        return super().select(from_tables=[EVENT_TABLE_NAME], where={"id": id})[0]
