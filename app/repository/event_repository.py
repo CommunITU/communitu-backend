@@ -8,7 +8,7 @@ from app.constants.database_constants import EVENT_TABLE_INIT_STAT, \
     EVENT_REGISTRATION_QUESTION_TEXT_TYPE_USER_RESPONSE_TABLE_INIT_STAT, \
     EVENT_REGISTRATION_QUESTION_CHOICE_TYPE_USER_RESPONSE_TABLE_INIT_STAT, EVENT_REGISTRATION_QUESTION_TABLE_NAME, \
     EVENT_REGISTRATION_QUESTION_OPTION_TABLE_NAME, EVENT_REGISTRATION_TEXT_TYPE_QUESTION_TABLE_NAME, \
-    EVENT_REGISTRATION_CHOICE_TYPE_QUESTION_TABLE_NAME
+    EVENT_REGISTRATION_CHOICE_TYPE_QUESTION_TABLE_NAME, LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME
 
 from app.repository import BaseRepository
 
@@ -95,3 +95,61 @@ class EventRepository(BaseRepository):
         """
 
         return super().select(from_tables=[EVENT_TABLE_NAME], where={"id": id})[0]
+
+    @classmethod
+    def get_user_participation_status(cls, event_id, user_id):
+        """
+        :return: Participation status.
+        """
+        event = super().select(from_tables=[LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME],
+                               where={"user_id": user_id, "event_id": event_id})
+
+        return True if event else False
+
+    @classmethod
+    def participate_to_event(cls, event_id, user_id):
+        """
+        Create new record on Event-Participant User table.
+        """
+        super().add(table_name=LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME,
+                    data={'event_id': event_id, 'user_id': user_id})
+
+    @classmethod
+    def cancel_participation(cls, event_id, user_id):
+        """
+        Delete record on Event-Participant User table.
+        """
+        super().delete(table_name=LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME,
+                       where={'event_id': event_id, 'user_id': user_id})
+
+    @classmethod
+    def get_registration_questions(cls, event_id):
+        """
+        Delete record on Event-Participant User table.
+        """
+
+        questions_res = super().select(from_tables=[EVENT_REGISTRATION_QUESTION_TABLE_NAME],
+                                       where={'event_id': event_id})
+        for question in questions_res:
+            if question['question_type'] == 'choice':
+                question['options'] = []
+
+        # Convert questions_res to map that contains the elements as {q_id:question}
+        questions_map = {question['id']: question for question in questions_res}
+
+        # Fetch the question options
+        join_statement = """ INNER JOIN {} AS O ON O.question_id = Q.id """.format(
+            EVENT_REGISTRATION_QUESTION_OPTION_TABLE_NAME)
+
+        options = super().select(from_tables=["{} AS Q".format(EVENT_REGISTRATION_QUESTION_TABLE_NAME)],
+                                 return_columns=["O.*"],
+                                 join_statements=[join_statement],
+                                 where={"Q.event_id": event_id})
+
+        # Add options to corresponding question
+        for option in options:
+            id = option['question_id']
+            questions_map[id]['options'].append(option)
+
+        # Return all registration questions of the specified event.
+        return questions_map

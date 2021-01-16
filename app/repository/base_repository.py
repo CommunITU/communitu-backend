@@ -43,6 +43,23 @@ class BaseRepository:
 
     @classmethod
     @require_sql_connection
+    def delete(cls, connection=None, table_name=None, where={}):
+        """
+        Creates new record on database based on passed data.
+
+        :param connection:  Provided by @require_sql_decorator. Do not specify in function calls explicitly.
+        :param table_name:  The table that new record to be deleted to.
+        :param where:       The conditions of delete query.
+        """
+        with connection.cursor() as cursor:
+            create_statement = """DELETE FROM {} WHERE {}
+                                   """.format(table_name if table_name else cls.table,
+                                              str.join(" AND ", ["{}='{}'".format(w, where[w]) for w in where.keys()]))
+
+            cursor.execute(create_statement)
+
+    @classmethod
+    @require_sql_connection
     def select(cls, connection=None, return_columns=[], from_tables=[], join_statements=[],
                where={}, limit=None, offset=None, order_by={}):
         """
@@ -57,6 +74,7 @@ class BaseRepository:
         :param where:               The dictionary of where conditions. The column names should be specified as key and
                                     conditions as value.
         :param limit:               The number of records that will be returned.
+        :param offset               Number of row to be skipped
         :param order_by:            The dictionary of order by conditions. The keys of dictionary should be the
                                     column names, values should be 'ASC' or 'DESC'.
 

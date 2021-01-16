@@ -76,3 +76,72 @@ def get_event(event_id):
     dto_list = map_to_dto(event, event_model_dto)
 
     return make_response(jsonify({'event': dto_list, 'message': 'Event fetched successfully!'}), 200)
+
+
+@event_api.route("/events/<event_id>/participants/<user_id>", methods=['GET'])
+def get_user_participation_status(event_id, user_id):
+    """
+    :return: Return whether the user is participated to given event or not.
+    """
+
+    try:
+        status = event_repo.get_user_participation_status(event_id, user_id)
+    except Exception as e:
+        return make_response(jsonify({'message': 'An error occurred!'}), 400)
+
+    return make_response(
+        jsonify({'participationStatus': status, 'message': 'Participation status fetched successfully!'}), 200)
+
+
+@event_api.route("/events/<event_id>/participants", methods=['POST'])
+@require_token(request)
+def participate_to_event(user_id, event_id):
+    """
+    Receive HTTP requests to add user to participants of given event.
+
+    :return: Configured HTTP response
+    """
+
+    try:
+        event_repo.participate_to_event(event_id, user_id)
+    except Exception as e:
+        return make_response(jsonify({'message': 'An error occurred!'}), 400)
+
+    return make_response(
+        jsonify({'message': 'User participation performed successfully!'}), 200)
+
+
+@event_api.route("/events/<event_id>/participants", methods=['DELETE'])
+@require_token(request)
+def cancel_participation(user_id, event_id):
+    """
+    Receive HTTP requests to cancel user participation for the given event.
+
+    :return: Configured HTTP response
+    """
+
+    try:
+        event_repo.cancel_participation(event_id, user_id)
+    except Exception as e:
+        return make_response(jsonify({'message': 'An error occurred!'}), 400)
+
+    return make_response(
+        jsonify({'message': 'User participation cancelled successfully!'}), 200)
+
+
+@event_api.route("/events/<event_id>/reg_questions", methods=['GET'])
+@require_token(request)
+def get_registration_questions(event_id):
+    """
+
+    :return: Registration questions of given event.
+    """
+
+    try:
+        questions = event_repo.get_registration_questions(event_id)
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'message': 'An error occurred!'}), 400)
+
+    return make_response(
+        jsonify({'registration_questions': questions, 'message': 'Registration questions fetched successfully!'}), 200)

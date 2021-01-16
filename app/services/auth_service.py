@@ -22,14 +22,13 @@ def require_token(request):
         @wraps(func)
         def wrapper(*args, **kwargs):
             headers = request.headers
-
             if "Authorization" not in headers:
-                return make_response("Token is not correct.", 403,
+                return make_response({'message': "Token is not correct."}, 403,
                                      {'WWW-Authenticate': 'Basic realm="Token is not correct."'})
 
             token = headers['Authorization'].replace("Bearer ", "")
             if not token:
-                return make_response("Token is not correct.", 403,
+                return make_response({'message': "Token is not correct."}, 403,
                                      {'WWW-Authenticate': 'Basic realm="Token is not correct."'})
             try:
                 token_data = jwt.decode(token, current_app.config['SECRET_KEY'], algorithms=['HS256'])
@@ -45,10 +44,10 @@ def require_token(request):
                     required_params['user'] = user_repo.get_user_by_email(email=user_email)
 
             except NoSuchUserError as e:
-                return make_response(str(e), 403,
+                return make_response({'message': str(e)}, 403,
                                      {'WWW-Authenticate': 'Basic realm="No such user with given email."'})
             except Exception as e:
-                return make_response(str(e), 403, {'WWW-Authenticate': 'Basic realm="Token is not correct."'})
+                return make_response({'message': str(e)}, 403, {'WWW-Authenticate': 'Basic realm="Token is not correct."'})
             res = func(*args, **kwargs, **required_params)  # If token is valid, execute the real function
 
             return res
