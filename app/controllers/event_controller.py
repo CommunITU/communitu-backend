@@ -152,7 +152,6 @@ def cancel_participation(user_id, event_id):
 @require_token(request)
 def get_registration_questions(event_id):
     """
-
     :return: Registration questions of given event.
     """
 
@@ -164,3 +163,39 @@ def get_registration_questions(event_id):
 
     return make_response(
         jsonify({'registration_questions': questions, 'message': 'Registration questions fetched successfully!'}), 200)
+
+
+@event_api.route("/events/<event_id>/comments", methods=['GET'])
+def get_event_comments(event_id):
+    """
+    :return: Comments of given event.
+    """
+
+    try:
+        comments = event_repo.get_event_comments_by_id(event_id)
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'message': 'An error occurred!'}), 400)
+
+    return make_response(
+        jsonify({'comments': comments, 'message': 'Comments fetched successfully!'}), 200)
+
+
+@event_api.route("/events/<event_id>/comments", methods=['POST'])
+@require_token(request)
+def add_event_comment(user_id, event_id):
+    """
+    Receives requests to create new event comment.
+    """
+
+    try:
+        comment = request.get_json()['comment']
+        comment_data = {'content': comment, 'user_id': user_id, 'event_id': event_id}
+        event_repo.add_event_comment(comment_data=comment_data)
+
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'message': 'An error occurred!'}), 400)
+
+    return make_response(
+        jsonify({'message': 'Comment created successfully!'}), 200)

@@ -8,7 +8,8 @@ from app.constants.database_constants import EVENT_TABLE_INIT_STAT, \
     EVENT_REGISTRATION_QUESTION_TEXT_TYPE_USER_RESPONSE_TABLE_INIT_STAT, \
     EVENT_REGISTRATION_QUESTION_CHOICE_TYPE_USER_RESPONSE_TABLE_INIT_STAT, EVENT_REGISTRATION_QUESTION_TABLE_NAME, \
     EVENT_REGISTRATION_QUESTION_OPTION_TABLE_NAME, EVENT_REGISTRATION_TEXT_TYPE_QUESTION_TABLE_NAME, \
-    EVENT_REGISTRATION_CHOICE_TYPE_QUESTION_TABLE_NAME, LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME
+    EVENT_REGISTRATION_CHOICE_TYPE_QUESTION_TABLE_NAME, LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME, \
+    EVENT_COMMENT_TABLE_NAME
 
 from app.repository import BaseRepository
 
@@ -156,3 +157,28 @@ class EventRepository(BaseRepository):
 
         # Return all registration questions of the specified event.
         return list(questions_map.values())
+
+    @classmethod
+    def get_event_comments_by_id(cls, event_id, user_id=None):
+        """
+            Fetch user comments of event.
+        """
+
+        # TODO: Fetch user name and profile photo with join!
+        if user_id:
+            comments = super().select(from_tables=[EVENT_COMMENT_TABLE_NAME],
+                                      where={'user_id': user_id, 'event_id': event_id})
+
+        else:
+            comments = super().select(from_tables=[EVENT_COMMENT_TABLE_NAME],
+                                      where={'event_id': event_id}, order_by={'created_at': 'DESC'})
+
+        return comments
+
+    @classmethod
+    def add_event_comment(cls, comment_data):
+        """
+            Fetch user comments of event.
+        """
+
+        super().add(table_name=EVENT_COMMENT_TABLE_NAME, data=comment_data)
