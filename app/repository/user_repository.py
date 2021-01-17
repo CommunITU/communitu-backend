@@ -1,7 +1,9 @@
 from app.repository import BaseRepository
 from app.constants.error_messages import AUTH_CREDENTIALS_NOT_CORRECT, NO_SUCH_USER_WITH_GIVEN_EMAIL
 from app.constants.database_constants import USER_TABLE_INIT_STAT, CLUB_TABLE_NAME, \
-    LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME
+    LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME, EVENT_REGISTRATION_QUESTION_USER_RESPONSE_TABLE_NAME, \
+    EVENT_REGISTRATION_QUESTION_TEXT_TYPE_USER_RESPONSE_TABLE_NAME, \
+    EVENT_REGISTRATION_QUESTION_CHOICE_TYPE_USER_RESPONSE_TABLE_NAME
 from app.constants.database_constants import USER_TABLE_NAME
 from app.exceptions.auth_exceptions import AuthCredentialsError, NoSuchUserError
 
@@ -81,3 +83,43 @@ class UserRepository(BaseRepository):
                                join_statements=[join_statement],
                                where={"li.user_id": user_id})
         return clubs
+
+    @classmethod
+    def save_registration_questions_responses(cls, user_responses, user_id):
+        """
+            Save user responses to database.
+
+        :param user_responses:  The user answers to event registration questions.
+        :param user_id
+        """
+
+        for question_id in user_responses.keys():
+            user_response = user_responses[question_id]
+
+            new_user_response = {'question_id': question_id, 'user_id': user_id, 'response_type': user_response['type']}
+
+            user_response_id = super().add(table_name=EVENT_REGISTRATION_QUESTION_USER_RESPONSE_TABLE_NAME,
+                                           data=new_user_response, return_id=True)
+
+            if user_response['type'] == 'text':
+                new_text_user_response = {'id': user_response_id, 'user_response': user_response['answer']}
+                super().add(table_name=EVENT_REGISTRATION_QUESTION_TEXT_TYPE_USER_RESPONSE_TABLE_NAME,
+                            data=new_text_user_response)
+
+            elif user_response['type'] == 'choice':
+                new_choice_user_response = {'id': user_response_id, 'selected_option_id': user_response['answer']}
+                super().add(table_name=EVENT_REGISTRATION_QUESTION_CHOICE_TYPE_USER_RESPONSE_TABLE_NAME,
+                            data=new_choice_user_response)
+
+    @classmethod
+    def delete_registration_questions_responses(cls, question_ids, user_id):
+        """
+            Delete user's responses from database.
+
+        :param question_ids:  The ids of the questions from which the user's answers will be deleted.
+        :param user_id
+        """
+
+        for q_id in question_ids:
+            super().delete(table_name=EVENT_REGISTRATION_QUESTION_USER_RESPONSE_TABLE_NAME,
+                           where={'question_id': q_id['id'], 'user_id': user_id})

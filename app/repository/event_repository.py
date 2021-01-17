@@ -123,34 +123,36 @@ class EventRepository(BaseRepository):
                        where={'event_id': event_id, 'user_id': user_id})
 
     @classmethod
-    def get_registration_questions(cls, event_id):
+    def get_registration_questions(cls, event_id, get_question_options=True, return_columns=[]):
         """
         Delete record on Event-Participant User table.
         """
 
         questions_res = super().select(from_tables=[EVENT_REGISTRATION_QUESTION_TABLE_NAME],
-                                       where={'event_id': event_id})
-        for question in questions_res:
-            if question['question_type'] == 'choice':
-                question['options'] = []
+                                       where={'event_id': event_id}, return_columns=return_columns)
 
         # Convert questions_res to map that contains the elements as {q_id:question}
         questions_map = {question['id']: question for question in questions_res}
 
         # Fetch the question options
-        join_statement = """ INNER JOIN {} AS O ON O.question_id = Q.id """.format(
-            EVENT_REGISTRATION_QUESTION_OPTION_TABLE_NAME)
+        if get_question_options:
 
-        options = super().select(from_tables=["{} AS Q".format(EVENT_REGISTRATION_QUESTION_TABLE_NAME)],
-                                 return_columns=["O.*"],
-                                 join_statements=[join_statement],
-                                 where={"Q.event_id": event_id})
+            for question in questions_res:
+                if question['question_type'] == 'choice':
+                    question['options'] = []
 
-        # Add options to corresponding question
-        for option in options:
-            id = option['question_id']
-            questions_map[id]['options'].append(option)
+            join_statement = """ INNER JOIN {} AS O ON O.question_id = Q.id """.format(
+                EVENT_REGISTRATION_QUESTION_OPTION_TABLE_NAME)
+
+            options = super().select(from_tables=["{} AS Q".format(EVENT_REGISTRATION_QUESTION_TABLE_NAME)],
+                                     return_columns=["O.*"],
+                                     join_statements=[join_statement],
+                                     where={"Q.event_id": event_id})
+
+            # Add options to corresponding question
+            for option in options:
+                id = option['question_id']
+                questions_map[id]['options'].append(option)
 
         # Return all registration questions of the specified event.
-
         return list(questions_map.values())

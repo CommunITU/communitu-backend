@@ -3,11 +3,13 @@ from psycopg2._psycopg import IntegrityError
 from app.repository.event_repository import EventRepository
 from flask import Blueprint, request, jsonify, make_response
 
+from app.repository.user_repository import UserRepository
 from app.services.auth_service import require_token
 from app.util.map_to_dto import map_to_dto, event_model_dto
 
 event_api = Blueprint('event_api', __name__)
 event_repo = EventRepository
+user_repo = UserRepository
 
 
 @event_api.route("/events", methods=['POST'])
@@ -102,8 +104,16 @@ def participate_to_event(user_id, event_id):
     :return: Configured HTTP response
     """
 
+    # Get user's responses to event registration questions.
+    user_responses = None
+    if 'user_responses' in request.get_json():
+        user_responses = request.get_json()['user_responses']
+
     try:
         event_repo.participate_to_event(event_id, user_id)
+        if user_responses:
+            user_repo.save_registration_questions_responses(user_responses, user_id)
+
     except Exception as e:
         return make_response(jsonify({'message': 'An error occurred!'}), 400)
 
@@ -121,7 +131,16 @@ def cancel_participation(user_id, event_id):
     """
 
     try:
+        # Get registration question ids of the event
+        registration_questions = event_repo.get_registration_questions(event_id, get_question_options=False,
+                                                                       return_columns=['id'])
+
+        # Delete user's responses linked with reg. questions of the event.
+        user_repo.delete_registration_questions_responses(registration_questions, user_id)
+
+        # Cancel participation
         event_repo.cancel_participation(event_id, user_id)
+
     except Exception as e:
         return make_response(jsonify({'message': 'An error occurred!'}), 400)
 
