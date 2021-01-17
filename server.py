@@ -5,13 +5,18 @@ from app.constants.app_constants import TOKEN_SECRET_KEY
 from app.controllers.auth_controller import auth_api
 from app.controllers.club_controller import club_api
 from app.controllers.event_controller import event_api
+from app.controllers.file_upload_controller import upload_api
 from app.controllers.user_controller import user_api
 
+
 def register_controllers(m_app):
-    m_app.register_blueprint(user_api)   # register user controller
-    m_app.register_blueprint(event_api)  # register event controller
-    m_app.register_blueprint(auth_api)   # register auth controller
-    m_app.register_blueprint(club_api)   # register club controller
+    """ Register controllers """
+
+    m_app.register_blueprint(user_api)
+    m_app.register_blueprint(event_api)
+    m_app.register_blueprint(auth_api)
+    m_app.register_blueprint(club_api)
+    m_app.register_blueprint(upload_api)
 
 
 def init_db():

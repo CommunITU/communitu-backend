@@ -152,4 +152,5 @@ class EventRepository(BaseRepository):
             questions_map[id]['options'].append(option)
 
         # Return all registration questions of the specified event.
-        return questions_map
+
+        return list(questions_map.values())
