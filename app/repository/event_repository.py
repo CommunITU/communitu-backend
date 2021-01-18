@@ -9,7 +9,7 @@ from app.constants.database_constants import EVENT_TABLE_INIT_STAT, \
     EVENT_REGISTRATION_QUESTION_CHOICE_TYPE_USER_RESPONSE_TABLE_INIT_STAT, EVENT_REGISTRATION_QUESTION_TABLE_NAME, \
     EVENT_REGISTRATION_QUESTION_OPTION_TABLE_NAME, EVENT_REGISTRATION_TEXT_TYPE_QUESTION_TABLE_NAME, \
     EVENT_REGISTRATION_CHOICE_TYPE_QUESTION_TABLE_NAME, LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME, \
-    EVENT_COMMENT_TABLE_NAME
+    EVENT_COMMENT_TABLE_NAME, USER_TABLE_NAME
 
 from app.repository import BaseRepository
 
@@ -164,14 +164,22 @@ class EventRepository(BaseRepository):
             Fetch user comments of event.
         """
 
+        join_statement = """ JOIN {} as u ON c.user_id = u.id """.format(USER_TABLE_NAME)
+
         # TODO: Fetch user name and profile photo with join!
         if user_id:
             comments = super().select(from_tables=[EVENT_COMMENT_TABLE_NAME],
-                                      where={'user_id': user_id, 'event_id': event_id})
+                                      return_columns=["c.*", "u.name as sender_name", "u.surname as sender_surname",
+                                                      "u.profile_photo_url as sender_avatar"],
+                                      where={'user_id': user_id, 'event_id': event_id}, order_by={'created_at': 'DESC'},
+                                      join_statements=[join_statement])
 
         else:
-            comments = super().select(from_tables=[EVENT_COMMENT_TABLE_NAME],
-                                      where={'event_id': event_id}, order_by={'created_at': 'DESC'})
+            comments = super().select(from_tables=["{} as c".format(EVENT_COMMENT_TABLE_NAME)],
+                                      return_columns=["c.*", "u.name as sender_name", "u.surname as sender_surname",
+                                                      "u.profile_photo_url as sender_avatar"],
+                                      where={'event_id': event_id}, order_by={'created_at': 'DESC'},
+                                      join_statements=[join_statement])
 
         return comments
 

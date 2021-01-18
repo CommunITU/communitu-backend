@@ -66,10 +66,10 @@ class PopulateInitialDatabase:
     def __populate_users(cls):
 
         users = ({"email": "umut265@gmail.com", "password": "deneme", "name": "Umut Emre", "surname": "Bayramoglu",
-                  "profile_photo_url": "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"},
-                 {"email": "uebayramoglu@gmail.com", "password": "deneme", "name": "Umut Emre 2",
-                  "surname": "Bayramoglu 2",
-                  "profile_photo_url": "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"})
+                  "profile_photo_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fapp_images%2Fprofile_pic.png?alt=media&token=0d79339e-845c-4e42-ac87-4a674722f9b6"},
+                 {"email": "uebayramoglu@gmail.com", "password": "deneme", "name": "Red",
+                  "surname": "John",
+                  "profile_photo_url": "https://upload.wikimedia.org/wikipedia/commons/thumb/0/04/Red-John-Smiley-Face.png/444px-Red-John-Smiley-Face.png"})
 
         for user in users:
             cls.__user_repo.create_user(user_data=user)

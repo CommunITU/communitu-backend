@@ -1,7 +1,7 @@
 # DATA TRANSFER OBJECT MODELS
 event_model_dto = ['id', 'name', 'description', 'image_url', 'start_date', 'end_date', 'location', 'quota',
                    'created_by']
-user_model_dto = ['id', 'email', 'name', 'surname']
+user_model_dto = ['id', 'email', 'name', 'surname', 'profile_photo_url']
 
 
 def map_to_dto(dao_obj, dto_model):
