@@ -47,7 +47,8 @@ def require_token(request):
                 return make_response({'message': str(e)}, 403,
                                      {'WWW-Authenticate': 'Basic realm="No such user with given email."'})
             except Exception as e:
-                return make_response({'message': str(e)}, 403, {'WWW-Authenticate': 'Basic realm="Token is not correct."'})
+                return make_response({'message': str(e)}, 403,
+                                     {'WWW-Authenticate': 'Basic realm="Token is not correct."'})
             res = func(*args, **kwargs, **required_params)  # If token is valid, execute the real function
 
             return res
@@ -87,4 +88,11 @@ def register(user_data):
         Create new user
         :return: A dictionary that contains user data (name, email, password).
     """
-    user_repo.create_user({"name": user_data['name'], "email": user_data['email'], "password": user_data['password']})
+
+    # If profile photo not exits, add default photo.
+    if 'profile_photo_url' not in user_data:
+        user_data[
+            'profile_photo_url'] = "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fapp_images%2Fprofile_pic.png?alt=media&token=0d79339e-845c-4e42-ac87-4a674722f9b6"
+
+    user_repo.create_user({"name": user_data['name'], "email": user_data['email'],
+                           "password": user_data['password'], "profile_photo_url": user_data['profile_photo_url']})
