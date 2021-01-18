@@ -116,6 +116,21 @@ class EventRepository(BaseRepository):
                     data={'event_id': event_id, 'user_id': user_id})
 
     @classmethod
+    def get_event_participants(cls, event_id, return_columns=[]):
+        """
+        :return Event participants
+        :return The features of participants will be returned
+        """
+
+        from_statement = " {} as eu ".format(LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME)
+        join_statement = "JOIN {} as u ON eu.user_id =u.id AND eu.event_id = {}".format(USER_TABLE_NAME, event_id)
+
+        participants = super().select(from_tables=[from_statement], join_statements=[join_statement],
+                                      return_columns=return_columns)
+
+        return participants
+
+    @classmethod
     def cancel_participation(cls, event_id, user_id):
         """
         Delete record on Event-Participant User table.

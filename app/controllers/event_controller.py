@@ -148,6 +148,27 @@ def cancel_participation(user_id, event_id):
         jsonify({'message': 'User participation cancelled successfully!'}), 200)
 
 
+@event_api.route("/events/<event_id>/participants", methods=['GET'])
+def get_event_participants(event_id):
+    """
+    Receive HTTP requests to fetch participants of event.
+
+    :return: Configured HTTP response contains the participants data.
+    """
+
+    if 'return_params' in request.args:
+        return_params = request.args['return_params'].split(',')
+
+    try:
+        participants = event_repo.get_event_participants(event_id, return_columns=return_params)
+
+    except Exception as e:
+        return make_response(jsonify({'message': 'An error occurred while fetching participants!'}), 400)
+
+    return make_response(
+        jsonify({'participants': participants, 'message': 'Event participants fetched successfully!'}), 200)
+
+
 @event_api.route("/events/<event_id>/reg_questions", methods=['GET'])
 @require_token(request)
 def get_registration_questions(event_id):
