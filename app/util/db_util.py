@@ -65,9 +65,11 @@ class PopulateInitialDatabase:
     @classmethod
     def __populate_users(cls):
 
-        users = ({"email": "umut265@gmail.com", "password": "deneme", "name": "Umut Emre", "surname": "Bayramoglu"},
+        users = ({"email": "umut265@gmail.com", "password": "deneme", "name": "Umut Emre", "surname": "Bayramoglu",
+                  "profile_photo_url": "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"},
                  {"email": "uebayramoglu@gmail.com", "password": "deneme", "name": "Umut Emre 2",
-                  "surname": "Bayramoglu 2"})
+                  "surname": "Bayramoglu 2",
+                  "profile_photo_url": "https://cdn.business2community.com/wp-content/uploads/2017/08/blank-profile-picture-973460_640.png"})
 
         for user in users:
             cls.__user_repo.create_user(user_data=user)
@@ -85,23 +87,34 @@ class PopulateInitialDatabase:
     def __populate_events(cls):
 
         events = ({"name": "My Event 1", "description": "Event description 1", "quota": 100, "created_by": 1,
-                   "start_date": datetime.datetime.now(), "image_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fclubs%2F372b73b-f3-ba23-cdc7-5bbbcb56a07c?alt=media&token=a6ecadfb-1536-42c4-98ac-f3cb7b2d0b24", "location": "Ankara",
-                   "header_photo_url": None,"end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
-                  {"name": "My Event 2", "description": "Event description 2", "quota": 300, "created_by": 2,
-                   "start_date": datetime.datetime.now(), "image_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fclubs%2F372b73b-f3-ba23-cdc7-5bbbcb56a07c?alt=media&token=a6ecadfb-1536-42c4-98ac-f3cb7b2d0b24",
+                   "start_date": datetime.datetime.now(),
+                   "image_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fclubs%2F372b73b-f3-ba23-cdc7-5bbbcb56a07c?alt=media&token=a6ecadfb-1536-42c4-98ac-f3cb7b2d0b24",
                    "location": "Ankara",
-                   "header_photo_url": None,"end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
+                   "header_photo_url": None, "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
+                  {"name": "My Event 2", "description": "Event description 2", "quota": 300, "created_by": 2,
+                   "start_date": datetime.datetime.now(),
+                   "image_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fclubs%2F372b73b-f3-ba23-cdc7-5bbbcb56a07c?alt=media&token=a6ecadfb-1536-42c4-98ac-f3cb7b2d0b24",
+                   "location": "Ankara",
+                   "header_photo_url": None, "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
                   {"name": "My Event 3", "description": "Event description 3", "quota": 90, "created_by": 1,
-                   "start_date": datetime.datetime.now(), "image_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fclubs%2F372b73b-f3-ba23-cdc7-5bbbcb56a07c?alt=media&token=a6ecadfb-1536-42c4-98ac-f3cb7b2d0b24", "location": "Ankara",
+                   "start_date": datetime.datetime.now(),
+                   "image_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fclubs%2F372b73b-f3-ba23-cdc7-5bbbcb56a07c?alt=media&token=a6ecadfb-1536-42c4-98ac-f3cb7b2d0b24",
+                   "location": "Ankara",
                    "header_photo_url": None, "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
                   {"name": "Youtube Talk", "description": "Event description 1", "quota": 65, "created_by": 1,
-                   "start_date": datetime.datetime.now(), "image_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fclubs%2F372b73b-f3-ba23-cdc7-5bbbcb56a07c?alt=media&token=a6ecadfb-1536-42c4-98ac-f3cb7b2d0b24", "location": "Ankara",
+                   "start_date": datetime.datetime.now(),
+                   "image_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fclubs%2F372b73b-f3-ba23-cdc7-5bbbcb56a07c?alt=media&token=a6ecadfb-1536-42c4-98ac-f3cb7b2d0b24",
+                   "location": "Ankara",
                    "header_photo_url": None, "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
                   {"name": "Neuropsychology Day", "description": "Event description 2", "quota": 30, "created_by": 2,
-                   "start_date": datetime.datetime.now(), "image_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fclubs%2F372b73b-f3-ba23-cdc7-5bbbcb56a07c?alt=media&token=a6ecadfb-1536-42c4-98ac-f3cb7b2d0b24", "location": "Ankara",
+                   "start_date": datetime.datetime.now(),
+                   "image_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fclubs%2F372b73b-f3-ba23-cdc7-5bbbcb56a07c?alt=media&token=a6ecadfb-1536-42c4-98ac-f3cb7b2d0b24",
+                   "location": "Ankara",
                    "header_photo_url": None, "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)},
                   {"name": "gRPC Workshop", "description": "Event description 3", "quota": 70, "created_by": 1,
-                   "start_date": datetime.datetime.now(), "image_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fclubs%2F372b73b-f3-ba23-cdc7-5bbbcb56a07c?alt=media&token=a6ecadfb-1536-42c4-98ac-f3cb7b2d0b24", "location": "Ankara",
+                   "start_date": datetime.datetime.now(),
+                   "image_url": "https://firebasestorage.googleapis.com/v0/b/communitu.appspot.com/o/images%2Fclubs%2F372b73b-f3-ba23-cdc7-5bbbcb56a07c?alt=media&token=a6ecadfb-1536-42c4-98ac-f3cb7b2d0b24",
+                   "location": "Ankara",
                    "header_photo_url": None, "end_date": datetime.datetime.now() + datetime.timedelta(hours=2)}
                   )
 
