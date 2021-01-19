@@ -1,5 +1,6 @@
 from flask import Flask
 from flask_cors import CORS
+from flask_socketio import SocketIO
 
 from app.constants.app_constants import TOKEN_SECRET_KEY
 from app.controllers.auth_controller import auth_api
@@ -57,3 +58,5 @@ def home_page():
 
 if __name__ == "__main__":
     app.run()
+    socket_io = SocketIO(app)
+    socket_io.run(app)

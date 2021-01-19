@@ -14,7 +14,7 @@ user_repo = UserRepository
 
 @event_api.route("/events", methods=['POST'])
 @require_token(request)
-def create_event(user_id=""):
+def create_event():
     """
     Handle api requests to create new event.
 
@@ -38,9 +38,9 @@ def create_event(user_id=""):
     try:
         event_repo.create_event(event_data)
     except Exception as e:
-        return make_response(jsonify({'message': "Database error occurred!"}), 400)
+        return make_response(jsonify({'errors': ["An error occurred on server!", ]}), 400)
 
-    return make_response(jsonify({'message': "Club created successfully!"}), 200)
+    return make_response(jsonify({'message': "Event created successfully!"}), 200)
 
 
 @event_api.route("/events", methods=['GET'])
@@ -70,14 +70,28 @@ def get_event(event_id):
 
     # Get event
     try:
-        event = event_repo.get_event_by_id(event_id)
+        event = event_repo.get_event_by_id(event_id, get_questions=True)
     except Exception as e:
         return make_response(jsonify({'message': 'An error occurred!'}), 400)
 
-    # Convert fetched events to data transfer object.
-    dto_list = map_to_dto(event, event_model_dto)
+    return make_response(jsonify({'event': event, 'message': 'Event fetched successfully!'}), 200)
 
-    return make_response(jsonify({'event': dto_list, 'message': 'Event fetched successfully!'}), 200)
+
+@event_api.route("/events/<event_id>", methods=['PUT'])
+def update_event(event_id):
+    """
+    Handle requests to update event.
+
+    :return Configured HTTP response with status and message
+    """
+
+    try:
+        event_data = request.get_json()['event']
+        event = event_repo.update_event_by_id(event_id=event_id, event_data=event_data)
+    except Exception as e:
+        return make_response(jsonify({'errors': ["An error occurred on server!", ]}), 400)
+
+    return make_response(jsonify({'event': event, 'message': 'Event updated successfully!'}), 200)
 
 
 @event_api.route("/events/<event_id>/participants/<user_id>", methods=['GET'])

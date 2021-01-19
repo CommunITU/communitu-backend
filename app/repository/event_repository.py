@@ -82,6 +82,14 @@ class EventRepository(BaseRepository):
                             table_name=EVENT_REGISTRATION_TEXT_TYPE_QUESTION_TABLE_NAME)
 
     @classmethod
+    def update_event_by_id(cls, event_data, event_id):
+        """
+            Update event with given data
+        """
+
+        super().update(table_name=EVENT_TABLE_NAME, set=event_data, where={'id': event_id})
+
+    @classmethod
     def get_all_events(cls, page, size):
         """
         :return:  All events ordered by created date.
@@ -90,12 +98,14 @@ class EventRepository(BaseRepository):
                               limit=size, offset=(page - 1) * size)
 
     @classmethod
-    def get_event_by_id(cls, id):
+    def get_event_by_id(cls, id, get_questions=False):
         """
         :return: Event
         """
-
-        return super().select(from_tables=[EVENT_TABLE_NAME], where={"id": id})[0]
+        event = super().select(from_tables=[EVENT_TABLE_NAME], where={"id": id})[0]
+        questions = cls.get_registration_questions(id, get_question_options=True)
+        event['registration_questions'] = questions
+        return event
 
     @classmethod
     def get_user_participation_status(cls, event_id, user_id):

@@ -60,6 +60,27 @@ class BaseRepository:
 
     @classmethod
     @require_sql_connection
+    def update(cls, connection=None, table_name=None, set={}, where={}):
+        """
+        Updates the database record
+
+        :param connection:  Provided by @require_sql_decorator. Do not specify in function calls explicitly.
+        :param table_name:  The table that record to be updated in.
+        :param set:         The new values of the record
+        :param where:       The conditions of update query.
+        """
+        with connection.cursor() as cursor:
+            create_statement = """UPDATE {} SET {} WHERE {}
+                                      """.format(table_name if table_name else cls.table,
+                                                 str.join(" , ",
+                                                          ["{} ='{}'".format(c, set[c]) for c in set.keys()]),
+                                                 str.join(" AND ",
+                                                          ["{}='{}'".format(w, where[w]) for w in where.keys()]))
+
+            cursor.execute(create_statement)
+
+    @classmethod
+    @require_sql_connection
     def select(cls, connection=None, return_columns=[], from_tables=[], join_statements=[],
                where={}, limit=None, offset=None, order_by={}):
         """
