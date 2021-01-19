@@ -60,7 +60,6 @@ class PopulateInitialDatabase:
         cls.__populate_clubs()
         cls.__populate_events()
         cls.__populate_authorities()
-        # todo: IMPLEMENT RELATIONS ON EVENTS.
 
     @classmethod
     def __populate_users(cls):

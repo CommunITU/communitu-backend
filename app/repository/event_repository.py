@@ -82,14 +82,6 @@ class EventRepository(BaseRepository):
                             table_name=EVENT_REGISTRATION_TEXT_TYPE_QUESTION_TABLE_NAME)
 
     @classmethod
-    def update_event_by_id(cls, event_data, event_id):
-        """
-            Update event with given data
-        """
-
-        super().update(table_name=EVENT_TABLE_NAME, set=event_data, where={'id': event_id})
-
-    @classmethod
     def get_all_events(cls, page, size):
         """
         :return:  All events ordered by created date.
@@ -106,6 +98,22 @@ class EventRepository(BaseRepository):
         questions = cls.get_registration_questions(id, get_question_options=True)
         event['registration_questions'] = questions
         return event
+
+    @classmethod
+    def update_event_by_id(cls, event_data, event_id):
+        """
+            Update event with given data
+        """
+
+        super().update(table_name=EVENT_TABLE_NAME, set=event_data, where={'id': event_id})
+
+    @classmethod
+    def delete_event_by_id(cls, event_id):
+        """
+            Delete event.
+        """
+
+        super().delete(table_name=EVENT_TABLE_NAME, where={'id': event_id})
 
     @classmethod
     def get_user_participation_status(cls, event_id, user_id):
@@ -191,7 +199,6 @@ class EventRepository(BaseRepository):
 
         join_statement = """ JOIN {} as u ON c.user_id = u.id """.format(USER_TABLE_NAME)
 
-        # TODO: Fetch user name and profile photo with join!
         if user_id:
             comments = super().select(from_tables=[EVENT_COMMENT_TABLE_NAME],
                                       return_columns=["c.*", "u.name as sender_name", "u.surname as sender_surname",

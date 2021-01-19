@@ -94,6 +94,24 @@ def update_event(event_id):
     return make_response(jsonify({'event': event, 'message': 'Event updated successfully!'}), 200)
 
 
+@event_api.route("/events/<event_id>", methods=['DELETE'])
+@require_token(request)
+def delete_event(event_id):
+    """
+    Handle requests to delete event.
+
+    :return Configured HTTP response with status and message
+    """
+
+    try:
+        event_repo.delete_event_by_id(event_id=event_id)
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'message': ' An error occurred on server while deleting event!'}), 400)
+
+    return make_response(jsonify({'message': 'Event deleted successfully!'}), 200)
+
+
 @event_api.route("/events/<event_id>/participants/<user_id>", methods=['GET'])
 def get_user_participation_status(event_id, user_id):
     """
