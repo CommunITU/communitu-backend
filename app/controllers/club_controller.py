@@ -19,3 +19,40 @@ def create_club(user_id=""):
         return make_response(jsonify({'errors': ["Club name already exists!", ]}), 400)
 
     return make_response(jsonify({'message': "Club created successfully!"}), 200)
+
+
+@club_api.route("/clubs/<club_id>", methods=['GET'])
+@require_token(request)
+def get_club_by_id(club_id):
+    club_data = request.get_json()
+    try:
+        club = club_repo.get_club_by_id(club_data)
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'club': club, 'message': "An error occurred while getting event!"}), 400)
+
+    return make_response(jsonify({'message': "Club fetched successfully!"}), 200)
+
+
+@club_api.route("/clubs/<club_id>", methods=['DELETE'])
+def delete_club_by_id(club_id):
+    try:
+        club_repo.delete_club_by_id(club_id)
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'message': "An error occurred while deleting event!"}), 400)
+
+    return make_response(jsonify({'message': "Club deleted successfully!"}), 200)
+
+
+@club_api.route("/clubs/<club_id>", methods=['PUT'])
+@require_token(request)
+def update_club_by_id(club_id):
+    club_data = request.get_json()
+    try:
+        club_repo.update_club_by_id(club_data)
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'message': "An error occurred while updating event!"}), 400)
+
+    return make_response(jsonify({'message': "Club updated successfully!"}), 200)

@@ -11,18 +11,6 @@ class ClubRepository(BaseRepository):
         Performs all database operations related to clubs.
     """
 
-    def __init__(self):
-        super().__init__(table=CLUB_TABLE_NAME)
-
-    @classmethod
-    def initialize_table(cls):
-        # Initialize main table
-        super().initialize_table(initialization_statement=CLUB_TABLE_INIT_STAT)
-
-        # Initialize linker tables
-        super().initialize_table(initialization_statement=LINKER_CLUB_USER_EXECUTIVE_TABLE_INIT_STAT)
-        super().initialize_table(initialization_statement=LINKER_CLUB_USER_PARTICIPANT_TABLE_INIT_STAT)
-
     @classmethod
     def create_club(cls, club_data, user_id_who_created):
         club_data["created_by"] = user_id_who_created
@@ -33,6 +21,19 @@ class ClubRepository(BaseRepository):
         # Link the club with the user who created.
         super().add(map_user_club, table_name=LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME)
         super().add(map_user_club, table_name=LINKER_CLUB_USER_PARTICIPANT_TABLE_NAME)
+
+    @classmethod
+    def get_club_by_id(cls, club_id):
+        club = super().select(from_tables=[CLUB_TABLE_NAME], where={'id': club_id})
+        return club
+
+    @classmethod
+    def update_club_by_id(cls, club_data):
+        super().update(table_name=CLUB_TABLE_NAME, club_data=club_data, where={'id': club_data['id']})
+
+    @classmethod
+    def delete_club_by_id(cls, club_id):
+        super().delete(table_name=CLUB_TABLE_NAME, where={'id': club_id})
 
     @classmethod
     def participate_to_club(cls, club_data, user_id_who_created):
