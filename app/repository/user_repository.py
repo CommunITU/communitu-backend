@@ -86,24 +86,40 @@ class UserRepository(BaseRepository):
             LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME, user_id)
         join_statements.append(get_clubs_join)
 
+        clubs = super().select(return_columns=return_columns, from_tables=from_statements,
+                               join_statements=join_statements, group_by=[" c.id "])
+
         if extra_fields:
             if 'event_num' in extra_fields:
-                return_columns.append(' count(e) as event_num ')
-                get_event_num = " LEFT JOIN {} as e ON e.created_by = c.id " \
-                    .format(EVENT_TABLE_NAME, )
-                join_statements.append(get_event_num)
+                get_event_num_join = " LEFT JOIN {} as e ON e.created_by = c.id ".format(EVENT_TABLE_NAME)
+
+                event_num = super().select(return_columns=[" c.id, count(e) as event_num "],
+                                           from_tables=[" {} as c".format(CLUB_TABLE_NAME)],
+                                           join_statements=[get_event_num_join], group_by=[" c.id "])
+
+                # TODO: REFACTOR THIS PART !!!!!!
+                for club in event_num:
+                    for cl in clubs:
+                        if cl['id'] == club['id']:
+                            cl['event_num'] = club['event_num']
+                            break
 
             if 'participant_num' in extra_fields:
-                return_columns.append(' count(u) as participant_num ')
-
                 get_participant_num_join = " LEFT JOIN {} as cup ON cup.club_id = c.id " \
                                            " LEFT JOIN {} as u ON u.id = cup.user_id " \
                     .format(LINKER_CLUB_USER_PARTICIPANT_TABLE_NAME, USER_TABLE_NAME)
 
-                join_statements.append(get_participant_num_join)
+                participant_num = super().select(return_columns=[" c.id, count(u) as participant_num "],
+                                                 from_tables=[" {} as c".format(CLUB_TABLE_NAME)],
+                                                 join_statements=[get_participant_num_join], group_by=[" c.id "])
 
-        clubs = super().select(return_columns=return_columns, from_tables=from_statements,
-                               join_statements=join_statements, group_by=[" c.id "])
+                # TODO: REFACTOR THIS PART !!!!!!
+                for club in participant_num:
+                    for cl in clubs:
+                        if cl['id'] == club['id']:
+                            cl['participant_num'] = club['participant_num']
+                            break
+
         return clubs
 
     @classmethod
