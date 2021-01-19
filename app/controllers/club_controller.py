@@ -19,4 +19,3 @@ def create_club(user_id=""):
         return make_response(jsonify({'errors': ["Club name already exists!", ]}), 400)
 
     return make_response(jsonify({'message': "Club created successfully!"}), 200)
-

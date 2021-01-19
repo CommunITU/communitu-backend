@@ -9,7 +9,7 @@ from app.constants.database_constants import EVENT_TABLE_INIT_STAT, \
     EVENT_REGISTRATION_QUESTION_CHOICE_TYPE_USER_RESPONSE_TABLE_INIT_STAT, EVENT_REGISTRATION_QUESTION_TABLE_NAME, \
     EVENT_REGISTRATION_QUESTION_OPTION_TABLE_NAME, EVENT_REGISTRATION_TEXT_TYPE_QUESTION_TABLE_NAME, \
     EVENT_REGISTRATION_CHOICE_TYPE_QUESTION_TABLE_NAME, LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME, \
-    EVENT_COMMENT_TABLE_NAME, USER_TABLE_NAME
+    EVENT_COMMENT_TABLE_NAME, USER_TABLE_NAME, LINKER_USER_AUTHORITY_TABLE_NAME, AUTHORITY_TABLE_NAME
 
 from app.repository import BaseRepository
 
@@ -81,6 +81,7 @@ class EventRepository(BaseRepository):
                     cls.add(data={'id': question_id},
                             table_name=EVENT_REGISTRATION_TEXT_TYPE_QUESTION_TABLE_NAME)
 
+
     @classmethod
     def get_all_events(cls, page, size):
         """
@@ -140,10 +141,19 @@ class EventRepository(BaseRepository):
         :return The features of participants will be returned
         """
 
-        from_statement = " {} as eu ".format(LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME)
-        join_statement = "JOIN {} as u ON eu.user_id =u.id AND eu.event_id = {}".format(USER_TABLE_NAME, event_id)
+        return_columns = [' u.* ', ' a.* ']
 
-        participants = super().select(from_tables=[from_statement], join_statements=[join_statement],
+        from_statement = " {} as u ".format(USER_TABLE_NAME)
+
+        join_statement_1 = " JOIN {} as eu ON eu.user_id =u.id AND eu.event_id = {} ".format(
+            LINKER_EVENT_USER_PARTICIPANT_TABLE_NAME, event_id)
+
+        join_statement_2 = " JOIN {} as ua ON ua.authority_id = u.id".format(LINKER_USER_AUTHORITY_TABLE_NAME)
+
+        join_statement_3 = " JOIN {} as a ON a.id = ua.authority_id ".format(AUTHORITY_TABLE_NAME)
+
+        participants = super().select(from_tables=[from_statement],
+                                      join_statements=[join_statement_1, join_statement_2, join_statement_3],
                                       return_columns=return_columns)
 
         return participants

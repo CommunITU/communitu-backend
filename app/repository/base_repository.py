@@ -82,7 +82,7 @@ class BaseRepository:
     @classmethod
     @require_sql_connection
     def select(cls, connection=None, return_columns=[], from_tables=[], join_statements=[],
-               where={}, limit=None, offset=None, order_by={}):
+               where={}, limit=None, offset=None, group_by={}, order_by={}):
         """
         Query the database based on specified conditions.
 
@@ -96,6 +96,7 @@ class BaseRepository:
                                     conditions as value.
         :param limit:               The number of records that will be returned.
         :param offset               Number of row to be skipped
+        :param group_by:            Group by parameters
         :param order_by:            The dictionary of order by conditions. The keys of dictionary should be the
                                     column names, values should be 'ASC' or 'DESC'.
 
@@ -118,8 +119,12 @@ class BaseRepository:
                 select_statement += " WHERE " + str.join(" AND ", ["{}='{}'".format(w, where[w]) for w in where.keys()])
 
             # Add 'order_by' clause
+            if group_by:
+                select_statement += " GROUP BY " + str.join(" , ",
+                                                            [" {} ".format(g) for g in group_by])
+            # Add 'order_by' clause
             if order_by:
-                select_statement += " ORDER BY " + str.join(" ,",
+                select_statement += " ORDER BY " + str.join(" , ",
                                                             ["{} {}".format(o, order_by[o]) for o in order_by.keys()])
 
             # Add 'limit' clause

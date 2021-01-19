@@ -3,7 +3,8 @@ from app.constants.error_messages import AUTH_CREDENTIALS_NOT_CORRECT, NO_SUCH_U
 from app.constants.database_constants import USER_TABLE_INIT_STAT, CLUB_TABLE_NAME, \
     LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME, EVENT_REGISTRATION_QUESTION_USER_RESPONSE_TABLE_NAME, \
     EVENT_REGISTRATION_QUESTION_TEXT_TYPE_USER_RESPONSE_TABLE_NAME, \
-    EVENT_REGISTRATION_QUESTION_CHOICE_TYPE_USER_RESPONSE_TABLE_NAME
+    EVENT_REGISTRATION_QUESTION_CHOICE_TYPE_USER_RESPONSE_TABLE_NAME, LINKER_CLUB_USER_PARTICIPANT_TABLE_NAME, \
+    EVENT_TABLE_NAME
 from app.constants.database_constants import USER_TABLE_NAME
 from app.exceptions.auth_exceptions import AuthCredentialsError, NoSuchUserError
 
@@ -68,7 +69,7 @@ class UserRepository(BaseRepository):
         return user_id.__getitem__(0)["id"]
 
     @classmethod
-    def get_clubs_executed_by_user(cls, user_id, return_columns):
+    def get_clubs_executed_by_user(cls, user_id, return_columns, extra_fields):
         """
             Return the clubs executed by user.
 
@@ -77,11 +78,32 @@ class UserRepository(BaseRepository):
         :return: List of clubs
         """
 
-        join_statement = "LEFT OUTER JOIN " + LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME + " li ON li.club_id = id"
+        from_statements = [" club  as c "]
+        return_columns = ["c.{}".format(column) for column in return_columns]
+        join_statements = []
 
-        clubs = super().select(return_columns=return_columns, from_tables=[CLUB_TABLE_NAME],
-                               join_statements=[join_statement],
-                               where={"li.user_id": user_id})
+        get_clubs_join = " JOIN {} as cue ON cue.club_id = c.id AND cue.user_id = {} ".format(
+            LINKER_CLUB_USER_EXECUTIVE_TABLE_NAME, user_id)
+        join_statements.append(get_clubs_join)
+
+        if extra_fields:
+            if 'event_num' in extra_fields:
+                return_columns.append(' count(e) as event_num ')
+                get_event_num = " LEFT JOIN {} as e ON e.created_by = c.id " \
+                    .format(EVENT_TABLE_NAME, )
+                join_statements.append(get_event_num)
+
+            if 'participant_num' in extra_fields:
+                return_columns.append(' count(u) as participant_num ')
+
+                get_participant_num_join = " LEFT JOIN {} as cup ON cup.club_id = c.id " \
+                                           " LEFT JOIN {} as u ON u.id = cup.user_id " \
+                    .format(LINKER_CLUB_USER_PARTICIPANT_TABLE_NAME, USER_TABLE_NAME)
+
+                join_statements.append(get_participant_num_join)
+
+        clubs = super().select(return_columns=return_columns, from_tables=from_statements,
+                               join_statements=join_statements, group_by=[" c.id "])
         return clubs
 
     @classmethod
