@@ -31,18 +31,16 @@ class UserRepository(BaseRepository):
 
     @classmethod
     def get_user_by_id(cls, user_id):
-        user = cls.select(from_tables=USER_TABLE_NAME, where={'id': user_id})
+        user = cls.select(from_tables=[USER_TABLE_NAME], where={'id': user_id})[0]
         return user
 
     @classmethod
     def update_user_by_id(cls, user_data):
-        user = cls.select(from_tables=USER_TABLE_NAME, user_datawhere={'id': user_data['id']})
-        return user
+        cls.update(table_name=USER_TABLE_NAME, set=user_data, where={'id': user_data['id']})
 
     @classmethod
     def delete_user_by_id(cls, user_id):
-        user = cls.select(from_tables=USER_TABLE_NAME, where={'id': user_id})
-        return user
+        cls.update(table_name=USER_TABLE_NAME, where={'id': user_id})
 
     def authenticate(self, email, password):
         """

@@ -32,10 +32,10 @@ def delete_user_by_id(user_id):
 
 
 @user_api.route("/users/<user_id>", methods=['PUT'])
-@require_token(request)
 def update_user_by_id(user_id):
     try:
-        user_repo.update_user_by_id(user_id)
+        user_data = request.get_json()['user']
+        user_repo.update_user_by_id(user_data)
     except Exception as e:
         print(e)
         return make_response(jsonify({'message': "An error occurred while updating user!"}), 400)
