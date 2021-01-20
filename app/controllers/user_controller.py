@@ -1,11 +1,46 @@
 import psycopg2
-from psycopg2._psycopg import IntegrityError
 from flask import Blueprint, request, make_response, jsonify
 
 from app.repository.user_repository import UserRepository
+from app.services.auth_service import require_token
 
 user_api = Blueprint('user_api', __name__)
 user_repo = UserRepository
+
+
+@user_api.route("/users/<user_id>", methods=['GET'])
+def get_user_by_id(user_id):
+    try:
+        user = user_repo.get_user_by_id(user_id)
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'message': "An error occurred while fetching user!"}), 400)
+
+    return make_response(jsonify({'user': user, 'message': "User fetched successfully!"}), 200)
+
+
+@user_api.route("/users/<user_id>", methods=['DELETE'])
+@require_token(request)
+def delete_user_by_id(user_id):
+    try:
+        user_repo.delete_user_by_id(user_id)
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'message': "An error occurred while deleting user!"}), 400)
+
+    return make_response(jsonify({'message': "User deleted successfully!"}), 200)
+
+
+@user_api.route("/users/<user_id>", methods=['PUT'])
+@require_token(request)
+def update_user_by_id(user_id):
+    try:
+        user_repo.update_user_by_id(user_id)
+    except Exception as e:
+        print(e)
+        return make_response(jsonify({'message': "An error occurred while updating user!"}), 400)
+
+    return make_response(jsonify({'message': "User updated successfully!"}), 200)
 
 
 @user_api.route("/users/<user_id>/clubs", methods=['GET'])

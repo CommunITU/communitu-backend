@@ -29,6 +29,21 @@ class UserRepository(BaseRepository):
         """
         cls.add(user_data, table_name=USER_TABLE_NAME)
 
+    @classmethod
+    def get_user_by_id(cls, user_id):
+        user = cls.select(from_tables=USER_TABLE_NAME, where={'id': user_id})
+        return user
+
+    @classmethod
+    def update_user_by_id(cls, user_data):
+        user = cls.select(from_tables=USER_TABLE_NAME, user_datawhere={'id': user_data['id']})
+        return user
+
+    @classmethod
+    def delete_user_by_id(cls, user_id):
+        user = cls.select(from_tables=USER_TABLE_NAME, where={'id': user_id})
+        return user
+
     def authenticate(self, email, password):
         """
         Check given credentials.
